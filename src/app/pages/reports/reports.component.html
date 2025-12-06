@@ -1,0 +1,112 @@
+<div class="p-8 bg-slate-900 min-h-screen">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-3xl font-bold text-white mb-8">Reports & Analytics</h1>
+
+    <!-- Key Metrics -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- Total Revenue -->
+      <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
+        <p class="text-blue-100 text-sm font-medium">Total Revenue</p>
+        <p class="text-3xl font-bold mt-2">{{ formatCurrency(totalRevenue) }}</p>
+        <p class="text-blue-100 text-xs mt-2">{{ totalTransactions }} transactions</p>
+      </div>
+
+      <!-- Average Transaction -->
+      <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white shadow-lg">
+        <p class="text-green-100 text-sm font-medium">Average Transaction</p>
+        <p class="text-3xl font-bold mt-2">{{ formatCurrency(averageTransaction) }}</p>
+        <p class="text-green-100 text-xs mt-2">Per transaction</p>
+      </div>
+
+      <!-- Total Transactions -->
+      <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white shadow-lg">
+        <p class="text-purple-100 text-sm font-medium">Total Transactions</p>
+        <p class="text-3xl font-bold mt-2">{{ totalTransactions }}</p>
+        <p class="text-purple-100 text-xs mt-2">Completed sales</p>
+      </div>
+
+      <!-- Revenue per Category -->
+      <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
+        <p class="text-orange-100 text-sm font-medium">Categories</p>
+        <p class="text-3xl font-bold mt-2">{{ revenueByCategory.length }}</p>
+        <p class="text-orange-100 text-xs mt-2">Active categories</p>
+      </div>
+    </div>
+
+    <!-- Top Products -->
+    <div class="bg-slate-800 rounded-lg shadow-lg p-6 mb-8">
+      <h2 class="text-xl font-bold text-white mb-4">Top Products by Revenue</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-white text-sm">
+          <thead class="border-b border-slate-700">
+            <tr>
+              <th class="text-left py-3 px-4">Product</th>
+              <th class="text-left py-3 px-4">SKU</th>
+              <th class="text-right py-3 px-4">Quantity</th>
+              <th class="text-right py-3 px-4">Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of topProducts" class="border-b border-slate-700 hover:bg-slate-700">
+              <td class="py-3 px-4 font-semibold">{{ product.name }}</td>
+              <td class="py-3 px-4 text-slate-400">{{ product.sku }}</td>
+              <td class="py-3 px-4 text-right">{{ product.quantity }}</td>
+              <td class="py-3 px-4 text-right text-blue-400 font-semibold">{{ formatCurrency(product.revenue) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Revenue by Category -->
+    <div class="bg-slate-800 rounded-lg shadow-lg p-6 mb-8">
+      <h2 class="text-xl font-bold text-white mb-4">Revenue by Category</h2>
+      <div class="space-y-3">
+        <div *ngFor="let category of revenueByCategory" class="flex items-center gap-4">
+          <div class="flex-1">
+            <div class="flex justify-between mb-1">
+              <span class="text-white font-semibold">{{ category.name }}</span>
+              <span class="text-blue-400">{{ formatCurrency(category.revenue) }}</span>
+            </div>
+            <div class="w-full bg-slate-700 rounded-full h-2">
+              <div
+                class="bg-blue-500 h-2 rounded-full"
+                [style.width.%]="getPercentage(category.revenue, totalRevenue)"
+              ></div>
+            </div>
+            <p class="text-slate-400 text-xs mt-1">{{ category.productCount }} products</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Customers -->
+    <div class="bg-slate-800 rounded-lg shadow-lg p-6">
+      <h2 class="text-xl font-bold text-white mb-4">Top Customers</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-white text-sm">
+          <thead class="border-b border-slate-700">
+            <tr>
+              <th class="text-left py-3 px-4">Customer</th>
+              <th class="text-right py-3 px-4">Transactions</th>
+              <th class="text-right py-3 px-4">Total Spent</th>
+              <th class="text-right py-3 px-4">Loyalty Points</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let customer of topCustomers" class="border-b border-slate-700 hover:bg-slate-700">
+              <td class="py-3 px-4 font-semibold">{{ customer.name }}</td>
+              <td class="py-3 px-4 text-right">{{ customer.transactions }}</td>
+              <td class="py-3 px-4 text-right text-blue-400 font-semibold">{{ formatCurrency(customer.totalSpent) }}</td>
+              <td class="py-3 px-4 text-right">
+                <span class="bg-yellow-500/20 text-yellow-400 px-3 py-1 rounded-full text-xs font-semibold">
+                  {{ customer.loyaltyPoints }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,46 +1,76 @@
-# PosPrject
+# Modern POS System - Angular 20
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.7.
+A comprehensive Point of Sale (POS) system built with Angular 20 and the latest web technologies.
 
-## Development server
+## Features
 
-To start a local development server, run:
+### Core Features
+- **Dashboard**: Real-time sales analytics and transaction overview
+- **Point of Sale**: Intuitive checkout interface with product catalog
+- **Product Management**: Manage inventory with categories and SKUs
+- **Cart Management**: Advanced cart with discounts and tax calculations
+- **Payment Processing**: Multiple payment methods (Cash, Card, Digital)
+- **Customer Management**: Track customer information and loyalty points
+- **Transaction History**: Complete transaction records and reporting
 
-```bash
-ng serve
+### Technical Features
+- **Angular 20**: Latest Angular framework with standalone components
+- **Signals**: Reactive state management with Angular signals
+- **Tailwind CSS**: Modern utility-first CSS framework
+- **TypeScript**: Fully typed codebase
+- **Responsive Design**: Mobile-friendly interface
+- **Dark Theme**: Professional dark UI for retail environments
+- **Real-time Updates**: Instant cart and inventory updates
+
+## Project Structure
+
+```
+src/
+├── app/
+│   ├── models/              # TypeScript interfaces and models
+│   │   ├── product.model.ts
+│   │   ├── cart.model.ts
+│   │   ├── customer.model.ts
+│   │   └── user.model.ts
+│   ├── services/            # Business logic services
+│   │   ├── product.service.ts
+│   │   ├── cart.service.ts
+│   │   ├── customer.service.ts
+│   │   └── auth.service.ts
+│   ├── pages/               # Page components
+│   │   ├── dashboard/
+│   │   └── pos/
+│   ├── layout/              # Layout components
+│   │   └── layout.component.ts
+│   ├── app.routes.ts        # Route configuration
+│   └── app.config.ts        # Application configuration
+├── styles.scss              # Global styles with Tailwind
+└── main.ts                  # Application entry point
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Installation
 
-## Code scaffolding
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+2. **Start development server**:
+   ```bash
+   npm start
+   ```
 
-```bash
-ng generate component component-name
-```
+3. **Navigate to**:
+   ```
+   http://localhost:4200/
+   ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Available Routes
 
-```bash
-ng generate --help
-```
+- `/dashboard` - Sales dashboard and analytics
+- `/pos` - Point of sale checkout interface
 
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
+## Key Services
 ng test
 ```
 

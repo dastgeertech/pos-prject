@@ -1,0 +1,9 @@
+// Barcode scanner component styles
+@keyframes scan-line {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(256px); }
+}
+
+.scan-line {
+  animation: scan-line 2s linear infinite;
+}

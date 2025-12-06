@@ -1,0 +1,284 @@
+<div class="p-8 bg-slate-900 min-h-screen">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-3xl font-bold text-white">Advanced Reports & Analytics</h1>
+      <div class="flex gap-3">
+        <button
+          (click)="exportReport()"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition"
+        >
+          Export Report
+        </button>
+        <button
+          (click)="printReport()"
+          class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition"
+        >
+          Print
+        </button>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="bg-slate-800 rounded-lg p-6 mb-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label class="block text-slate-300 text-sm font-semibold mb-2">Report Type</label>
+          <select
+            [(ngModel)]="selectedReportType"
+            (change)="onReportTypeChange()"
+            class="w-full px-4 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:border-blue-500 outline-none"
+          >
+            <option *ngFor="let type of getReportTypes()" [value]="type.value">
+              {{ type.label }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-slate-300 text-sm font-semibold mb-2">Date Range</label>
+          <select
+            [(ngModel)]="dateRange"
+            (change)="onDateRangeChange()"
+            class="w-full px-4 py-2 rounded-lg bg-slate-700 text-white border border-slate-600 focus:border-blue-500 outline-none"
+          >
+            <option *ngFor="let range of getDateRanges()" [value]="range.value">
+              {{ range.label }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-slate-300 text-sm font-semibold mb-2">Actions</label>
+          <button
+            (click)="loadAllChartData()"
+            class="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 rounded-lg transition"
+          >
+            Refresh Data
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
+        <p class="text-blue-100 text-sm font-medium">Total Revenue</p>
+        <p class="text-3xl font-bold mt-2">{{ formatCurrency(dashboardSummary.totalRevenue || 0) }}</p>
+        <p class="text-blue-100 text-xs mt-2">{{ dashboardSummary.totalTransactions || 0 }} transactions</p>
+      </div>
+
+      <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white shadow-lg">
+        <p class="text-green-100 text-sm font-medium">Profit</p>
+        <p class="text-3xl font-bold mt-2">{{ formatCurrency(dashboardSummary.profit || 0) }}</p>
+        <p class="text-green-100 text-xs mt-2">{{ formatPercentage(dashboardSummary.profitMargin || 0) }} margin</p>
+      </div>
+
+      <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white shadow-lg">
+        <p class="text-purple-100 text-sm font-medium">Average Order</p>
+        <p class="text-3xl font-bold mt-2">{{ formatCurrency(dashboardSummary.averageOrderValue || 0) }}</p>
+        <p class="text-purple-100 text-xs mt-2">Per transaction</p>
+      </div>
+
+      <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
+        <p class="text-orange-100 text-sm font-medium">Low Stock Items</p>
+        <p class="text-3xl font-bold mt-2">{{ dashboardSummary.lowStockProducts || 0 }}</p>
+        <p class="text-orange-100 text-xs mt-2">{{ dashboardSummary.outOfStockProducts || 0 }} out of stock</p>
+      </div>
+    </div>
+
+    <!-- Charts Grid -->
+    @if (!loading) {
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- Sales Trend Chart -->
+        <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+          <h3 class="text-xl font-bold text-white mb-4">Sales Trend</h3>
+          <div class="h-64 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-slate-400 mb-4">📈 Sales Trend Chart</div>
+              <div class="text-sm text-slate-500">
+                Revenue and transactions over time
+              </div>
+              <div class="mt-4 text-xs text-slate-600">
+                Last {{ dateRange }} days
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Category Performance -->
+        <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+          <h3 class="text-xl font-bold text-white mb-4">Category Performance</h3>
+          <div class="h-64 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-slate-400 mb-4">📊 Category Chart</div>
+              <div class="text-sm text-slate-500">
+                Revenue by product category
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top Products -->
+        <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+          <h3 class="text-xl font-bold text-white mb-4">Top Products</h3>
+          <div class="h-64 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-slate-400 mb-4">🏆 Products Chart</div>
+              <div class="text-sm text-slate-500">
+                Best performing products
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Segmentation -->
+        <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+          <h3 class="text-xl font-bold text-white mb-4">Customer Segmentation</h3>
+          <div class="h-64 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-slate-400 mb-4">👥 Customer Chart</div>
+              <div class="text-sm text-slate-500">
+                Customer distribution by segment
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Employee Performance -->
+        <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+          <h3 class="text-xl font-bold text-white mb-4">Employee Performance</h3>
+          <div class="h-64 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-slate-400 mb-4">👨‍💼 Employee Chart</div>
+              <div class="text-sm text-slate-500">
+                Hours worked by employees
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Expense Analysis -->
+        <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+          <h3 class="text-xl font-bold text-white mb-4">Expense Analysis</h3>
+          <div class="h-64 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-slate-400 mb-4">💰 Expense Chart</div>
+              <div class="text-sm text-slate-500">
+                Expenses by category
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Budget vs Actual -->
+        <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+          <h3 class="text-xl font-bold text-white mb-4">Budget vs Actual</h3>
+          <div class="h-64 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-slate-400 mb-4">📋 Budget Chart</div>
+              <div class="text-sm text-slate-500">
+                Budget vs actual spending
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hourly Sales -->
+        <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+          <h3 class="text-xl font-bold text-white mb-4">Hourly Sales</h3>
+          <div class="h-64 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-slate-400 mb-4">⏰ Hourly Chart</div>
+              <div class="text-sm text-slate-500">
+                Sales by hour of day
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    } @else {
+      <div class="flex items-center justify-center h-64">
+        <div class="text-center">
+          <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
+          <p class="text-slate-400">Loading reports...</p>
+        </div>
+      </div>
+    }
+
+    <!-- Detailed Tables -->
+    <div class="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Top Products Table -->
+      <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+        <h3 class="text-xl font-bold text-white mb-4">Top Products</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-white text-sm">
+            <thead class="border-b border-slate-700">
+              <tr>
+                <th class="text-left py-3 px-4">Product</th>
+                <th class="text-right py-3 px-4">Revenue</th>
+                <th class="text-right py-3 px-4">Quantity</th>
+                <th class="text-right py-3 px-4">Growth</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-700">
+                <td class="py-3 px-4">Laptop Pro</td>
+                <td class="py-3 px-4 text-right text-blue-400">{{ formatCurrency(12999) }}</td>
+                <td class="py-3 px-4 text-right">15</td>
+                <td class="py-3 px-4 text-right text-green-400">+12%</td>
+              </tr>
+              <tr class="border-b border-slate-700">
+                <td class="py-3 px-4">Wireless Mouse</td>
+                <td class="py-3 px-4 text-right text-blue-400">{{ formatCurrency(2999) }}</td>
+                <td class="py-3 px-4 text-right">150</td>
+                <td class="py-3 px-4 text-right text-green-400">+8%</td>
+              </tr>
+              <tr class="border-b border-slate-700">
+                <td class="py-3 px-4">Premium T-Shirt</td>
+                <td class="py-3 px-4 text-right text-blue-400">{{ formatCurrency(1999) }}</td>
+                <td class="py-3 px-4 text-right">100</td>
+                <td class="py-3 px-4 text-right text-red-400">-3%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Payment Methods Table -->
+      <div class="bg-slate-800 rounded-lg p-6 shadow-lg">
+        <h3 class="text-xl font-bold text-white mb-4">Payment Methods</h3>
+        <div class="overflow-x-auto">
+          <table class="w-full text-white text-sm">
+            <thead class="border-b border-slate-700">
+              <tr>
+                <th class="text-left py-3 px-4">Method</th>
+                <th class="text-right py-3 px-4">Count</th>
+                <th class="text-right py-3 px-4">Percentage</th>
+                <th class="text-right py-3 px-4">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="border-b border-slate-700">
+                <td class="py-3 px-4">Card</td>
+                <td class="py-3 px-4 text-right">45</td>
+                <td class="py-3 px-4 text-right">60%</td>
+                <td class="py-3 px-4 text-right text-blue-400">{{ formatCurrency(8999) }}</td>
+              </tr>
+              <tr class="border-b border-slate-700">
+                <td class="py-3 px-4">Cash</td>
+                <td class="py-3 px-4 text-right">20</td>
+                <td class="py-3 px-4 text-right">27%</td>
+                <td class="py-3 px-4 text-right text-blue-400">{{ formatCurrency(3999) }}</td>
+              </tr>
+              <tr class="border-b border-slate-700">
+                <td class="py-3 px-4">Digital</td>
+                <td class="py-3 px-4 text-right">10</td>
+                <td class="py-3 px-4 text-right">13%</td>
+                <td class="py-3 px-4 text-right text-blue-400">{{ formatCurrency(1999) }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

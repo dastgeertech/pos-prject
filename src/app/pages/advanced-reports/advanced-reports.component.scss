@@ -1,0 +1,25 @@
+// Advanced reports component styles
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .bg-slate-900 {
+    background: white !important;
+  }
+  
+  .bg-slate-800 {
+    background: #f8f9fa !important;
+  }
+  
+  .text-white {
+    color: #212529 !important;
+  }
+  
+  .text-slate-300,
+  .text-slate-400,
+  .text-slate-500,
+  .text-slate-600 {
+    color: #6c757d !important;
+  }
+}

@@ -1,0 +1,92 @@
+<div class="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 p-8">
+  <div class="max-w-7xl mx-auto">
+    <h1 class="text-4xl font-bold text-white mb-8">Dashboard</h1>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- Total Sales Card -->
+      <div class="bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg p-6 text-white shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-blue-100 text-sm font-medium">Total Sales</p>
+            <p class="text-3xl font-bold mt-2">${{ totalSales | number: '1.2-2' }}</p>
+          </div>
+          <svg class="w-8 h-8 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Transactions Card -->
+      <div class="bg-gradient-to-br from-green-500 to-green-600 rounded-lg p-6 text-white shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-green-100 text-sm font-medium">Transactions</p>
+            <p class="text-3xl font-bold mt-2">{{ transactions }}</p>
+          </div>
+          <svg class="w-8 h-8 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Products Card -->
+      <div class="bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg p-6 text-white shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-purple-100 text-sm font-medium">Products</p>
+            <p class="text-3xl font-bold mt-2">{{ products }}</p>
+          </div>
+          <svg class="w-8 h-8 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m0 0l8 4m-8-4v10l8 4m0-10l8 4m-8-4v10M8 7v10m8-10v10"></path>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Customers Card -->
+      <div class="bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg p-6 text-white shadow-lg">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-orange-100 text-sm font-medium">Customers</p>
+            <p class="text-3xl font-bold mt-2">{{ customers }}</p>
+          </div>
+          <svg class="w-8 h-8 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 12H9m6 0a6 6 0 11-12 0 6 6 0 0112 0z"></path>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="bg-slate-800 rounded-lg shadow-lg p-6">
+      <h2 class="text-xl font-bold text-white mb-4">Recent Transactions</h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-white text-sm">
+          <thead class="border-b border-slate-700">
+            <tr>
+              <th class="text-left py-3 px-4">Transaction ID</th>
+              <th class="text-left py-3 px-4">Amount</th>
+              <th class="text-left py-3 px-4">Payment Method</th>
+              <th class="text-left py-3 px-4">Status</th>
+              <th class="text-left py-3 px-4">Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let transaction of recentTransactions" class="border-b border-slate-700 hover:bg-slate-700">
+              <td class="py-3 px-4">{{ transaction.id | slice: 0: 8 }}...</td>
+              <td class="py-3 px-4">${{ transaction.amount | number: '1.2-2' }}</td>
+              <td class="py-3 px-4 capitalize">{{ transaction.paymentMethod }}</td>
+              <td class="py-3 px-4">
+                <span class="px-3 py-1 rounded-full text-xs font-semibold"
+                  [ngClass]="transaction.status === 'completed' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'">
+                  {{ transaction.status }}
+                </span>
+              </td>
+              <td class="py-3 px-4">{{ transaction.timestamp | date: 'short' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
