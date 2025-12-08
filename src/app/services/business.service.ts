@@ -306,8 +306,8 @@ export class BusinessService {
   createPurchaseOrder(
     supplierId: string,
     items: Omit<PurchaseOrderItem, 'id' | 'total' | 'receivedQuantity' | 'remainingQuantity' | 'margin'>[],
-    expectedDeliveryDate?: Date,
-    createdBy: string
+    createdBy: string,
+    expectedDeliveryDate?: Date
   ): PurchaseOrder {
     const supplier = this.suppliers().find(s => s.id === supplierId);
     if (!supplier) throw new Error('Supplier not found');

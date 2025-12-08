@@ -402,7 +402,6 @@ export class MultiLocationService {
     metrics: LocationPerformance['metrics']
   ): LocationPerformance {
     const performance: LocationPerformance = {
-      id: uuid(),
       locationId,
       period,
       date,
@@ -518,7 +517,7 @@ export class MultiLocationService {
       profit: number;
       profitMargin: number;
     }>;
-    transferActivity:: {
+    transferActivity: {
       totalTransfers: number;
       totalValue: number;
       activeTransfers: number;
@@ -762,7 +761,7 @@ export class MultiLocationService {
           thursday: { open: '06:00', close: '18:00' },
           friday: { open: '06:00', close: '18:00' },
           saturday: { open: '08:00', close: '14:00' },
-          sunday: { closed: true }
+          sunday: { open: '00:00', close: '00:00', closed: true }
         },
         timezone: 'America/New_York',
         currency: 'USD',
@@ -789,11 +788,14 @@ export class MultiLocationService {
       }
     ];
 
+    // Set the locations signal
     this.locations.set(mockLocations);
 
     // Initialize settings for mock locations
-    mockLocations.forEach(location => {
+    mockLocations.forEach((location: Location) => {
       this.initializeLocationSettings(location.id);
     });
   }
-}
+
+} // End of MultiLocationService class
+

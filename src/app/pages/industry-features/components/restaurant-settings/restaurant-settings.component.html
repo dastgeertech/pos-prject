@@ -1,0 +1,306 @@
+<div class="restaurant-settings">
+  <div class="header">
+    <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      🍽️ Restaurant Settings
+    </h2>
+    <p class="text-gray-600 dark:text-gray-400">
+      Configure specialized restaurant features for your establishment
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Left Column -->
+    <div class="space-y-6">
+      <!-- Table Management -->
+      <div class="setting-card">
+        <h3 class="text-lg font-medium mb-4">🪑 Table Management</h3>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-gray-700 dark:text-gray-300">Enable Table Management</span>
+            <label class="switch">
+              <input 
+                type="checkbox" 
+                [checked]="formData.tableManagement?.enabled"
+                (change)="toggleTableManagement(!formData.tableManagement?.enabled)"
+              >
+              <span class="slider"></span>
+            </label>
+          </div>
+          
+          <div *ngIf="formData.tableManagement?.enabled" class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Table Turn Time (minutes)
+              </label>
+              <input 
+                type="number" 
+                [value]="formData.tableManagement?.tableTurnTime || 60"
+                (change)="updateTableManagement({ tableTurnTime: +$event.target.value })"
+                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                min="15"
+                max="180"
+              >
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Maximum Capacity
+              </label>
+              <input 
+                type="number" 
+                [value]="formData.tableManagement?.maxCapacity || 100"
+                (change)="updateTableManagement({ maxCapacity: +$event.target.value })"
+                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                min="10"
+                max="500"
+              >
+            </div>
+            
+            <div class="flex items-center">
+              <input 
+                type="checkbox" 
+                id="autoAssign"
+                [checked]="formData.tableManagement?.autoAssign"
+                (change)="updateTableManagement({ autoAssign: !formData.tableManagement?.autoAssign })"
+                class="mr-2"
+              >
+              <label for="autoAssign" class="text-sm text-gray-700 dark:text-gray-300">
+                Auto-assign tables to servers
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Menu Management -->
+      <div class="setting-card">
+        <h3 class="text-lg font-medium mb-4">📋 Menu Management</h3>
+        <div class="space-y-3">
+          <h4 class="font-medium text-gray-900 dark:text-white">Menu Categories</h4>
+          <div class="space-y-2">
+            <div 
+              *ngFor="let category of menuCategories" 
+              class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+            >
+              <span class="text-gray-700 dark:text-gray-300">{{ category }}</span>
+              <label class="switch">
+                <input type="checkbox" checked>
+                <span class="slider"></span>
+              </label>
+            </div>
+          </div>
+          
+          <div class="pt-4">
+            <h4 class="font-medium text-gray-900 dark:text-white mb-2">Menu Features</h4>
+            <div class="space-y-2">
+              <div class="flex items-center">
+                <input 
+                  type="checkbox" 
+                  id="modifiers"
+                  checked
+                  class="mr-2"
+                >
+                <label for="modifiers" class="text-sm text-gray-700 dark:text-gray-300">
+                  Enable menu modifiers
+                </label>
+              </div>
+              
+              <div class="flex items-center">
+                <input 
+                  type="checkbox" 
+                  id="combos"
+                  checked
+                  class="mr-2"
+                >
+                <label for="combos" class="text-sm text-gray-700 dark:text-gray-300">
+                  Enable combo meals
+                </label>
+              </div>
+              
+              <div class="flex items-center">
+                <input 
+                  type="checkbox" 
+                  id="specials"
+                  checked
+                  class="mr-2"
+                >
+                <label for="specials" class="text-sm text-gray-700 dark:text-gray-300">
+                  Enable daily specials
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="space-y-6">
+      <!-- Delivery & Takeout -->
+      <div class="setting-card">
+        <h3 class="text-lg font-medium mb-4">🚚 Delivery & Takeout</h3>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-gray-700 dark:text-gray-300">Enable Delivery</span>
+            <label class="switch">
+              <input 
+                type="checkbox" 
+                [checked]="formData.delivery?.enabled"
+                (change)="toggleDelivery(!formData.delivery?.enabled)"
+              >
+              <span class="slider"></span>
+            </label>
+          </div>
+          
+          <div *ngIf="formData.delivery?.enabled" class="space-y-3">
+            <h4 class="font-medium text-gray-900 dark:text-white">Delivery Zones</h4>
+            <div class="space-y-2">
+              <div 
+                *ngFor="let zone of deliveryZones" 
+                class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+              >
+                <span class="text-gray-700 dark:text-gray-300">{{ zone }}</span>
+                <label class="switch">
+                  <input type="checkbox" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="pt-2">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Base Delivery Fee
+              </label>
+              <input 
+                type="number" 
+                [value]="formData.delivery?.fees?.baseFee || 2.99"
+                (change)="updateDeliverySettings({ fees: { 
+  baseFee: +$event.target.value,
+  distanceFee: formData.delivery?.fees?.distanceFee || 0.5,
+  timeFee: formData.delivery?.fees?.timeFee || 0,
+  weatherMultiplier: formData.delivery?.fees?.weatherMultiplier || 1.2,
+  rushHourMultiplier: formData.delivery?.fees?.rushHourMultiplier || 1.5
+} })"
+                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                min="0"
+                step="0.01"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reservations -->
+      <div class="setting-card">
+        <h3 class="text-lg font-medium mb-4">📅 Reservations</h3>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-gray-700 dark:text-gray-300">Enable Reservations</span>
+            <label class="switch">
+              <input 
+                type="checkbox" 
+                [checked]="formData.reservations?.enabled"
+                (change)="toggleReservations(!formData.reservations?.enabled)"
+              >
+              <span class="slider"></span>
+            </label>
+          </div>
+          
+          <div *ngIf="formData.reservations?.enabled" class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Max Party Size
+              </label>
+              <input 
+                type="number" 
+                [value]="formData.reservations?.maxPartySize || 20"
+                (change)="updateReservationSettings({ maxPartySize: +$event.target.value })"
+                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                min="2"
+                max="100"
+              >
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Advance Booking (days)
+              </label>
+              <input 
+                type="number" 
+                [value]="formData.reservations?.advanceBooking || 30"
+                (change)="updateReservationSettings({ advanceBooking: +$event.target.value })"
+                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                min="1"
+                max="365"
+              >
+            </div>
+            
+            <div class="flex items-center">
+              <input 
+                type="checkbox" 
+                id="confirmationRequired"
+                [checked]="formData.reservations?.confirmationRequired"
+                (change)="updateReservationSettings({ confirmationRequired: !formData.reservations?.confirmationRequired })"
+                class="mr-2"
+              >
+              <label for="confirmationRequired" class="text-sm text-gray-700 dark:text-gray-300">
+                Require confirmation
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Kitchen Settings -->
+      <div class="setting-card">
+        <h3 class="text-lg font-medium mb-4">👨‍🍳 Kitchen Settings</h3>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Display System
+            </label>
+            <select class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800">
+              <option>KDS (Kitchen Display System)</option>
+              <option>Printer</option>
+              <option>Both</option>
+            </select>
+          </div>
+          
+          <div class="flex items-center">
+            <input 
+              type="checkbox" 
+              id="trackPrepTime"
+              checked
+              class="mr-2"
+            >
+            <label for="trackPrepTime" class="text-sm text-gray-700 dark:text-gray-300">
+              Track preparation time
+            </label>
+          </div>
+          
+          <div class="flex items-center">
+            <input 
+              type="checkbox" 
+              id="autoRouting"
+              checked
+              class="mr-2"
+            >
+            <label for="autoRouting" class="text-sm text-gray-700 dark:text-gray-300">
+              Auto-route orders to stations
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save Button -->
+  <div class="mt-8 flex justify-end">
+    <button 
+      (click)="save.emit()"
+      class="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition-colors"
+    >
+      💾 Save Restaurant Settings
+    </button>
+  </div>
+</div>

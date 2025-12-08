@@ -6,6 +6,13 @@ import { ProductsComponent } from './pages/products/products.component';
 import { CustomersComponent } from './pages/customers/customers.component';
 import { ReportsComponent } from './pages/reports/reports.component';
 import { AdvancedReportsComponent } from './pages/advanced-reports/advanced-reports.component';
+import { Inventory } from './pages/inventory/inventory';
+import { PaymentComponent } from './pages/payment/payment.component';
+import { EmployeesComponent } from './pages/employees/employees.component';
+import { BusinessComponent } from './pages/business/business.component';
+import { LocationsComponent } from './pages/locations/locations.component';
+import { CloudFeaturesComponent } from './pages/cloud-features/cloud-features.component';
+import { HardwareManagementComponent } from './pages/hardware-management/hardware-management.component';
 
 export const routes: Routes = [
   {
@@ -17,8 +24,15 @@ export const routes: Routes = [
       { path: 'pos', component: PosComponent },
       { path: 'products', component: ProductsComponent },
       { path: 'customers', component: CustomersComponent },
+      { path: 'employees', component: EmployeesComponent },
+      { path: 'inventory', component: Inventory },
+      { path: 'payment', component: PaymentComponent },
       { path: 'reports', component: ReportsComponent },
-      { path: 'advanced-reports', component: AdvancedReportsComponent }
+      { path: 'advanced-reports', component: AdvancedReportsComponent },
+      { path: 'business', component: BusinessComponent },
+      { path: 'locations', component: LocationsComponent },
+      { path: 'cloud-features', component: CloudFeaturesComponent },
+  { path: 'hardware-management', component: HardwareManagementComponent }
     ]
   }
 ];

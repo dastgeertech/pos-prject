@@ -1,0 +1,288 @@
+<div class="service-settings">
+  <div class="header">
+    <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+      🔧 Service Settings
+    </h2>
+    <p class="text-gray-600 dark:text-gray-400">
+      Configure specialized service features for your business
+    </p>
+  </div>
+
+  @if ('appointments' in formData) {
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Left Column -->
+      <div class="space-y-6">
+        <!-- Appointment Settings -->
+        <div class="setting-card">
+          <h3 class="text-lg font-medium mb-4">📅 Appointment Settings</h3>
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="text-gray-700 dark:text-gray-300">Enable Appointments</span>
+              <label class="switch">
+                <input 
+                  type="checkbox" 
+                  [checked]="formData.appointments?.confirmationRequired"
+                  (change)="toggleAppointments(!formData.appointments?.confirmationRequired)"
+                >
+                <span class="slider"></span>
+              </label>
+            </div>
+            
+            <div *ngIf="formData.appointments?.confirmationRequired" class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Default Appointment Duration (minutes)
+              </label>
+              <input 
+                type="number" 
+                [value]="formData.appointments?.duration || 60"
+                (change)="updateAppointmentSettings({ duration: +$event.target.value })"
+                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                min="15"
+                max="480"
+              >
+            </div>
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Advance Booking (days)
+              </label>
+              <input 
+                type="number" 
+                [value]="formData.appointments?.advanceBooking || 30"
+                (change)="updateAppointmentSettings({ advanceBooking: +$event.target.value })"
+                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                min="1"
+                max="365"
+              >
+            </div>
+            
+            <div class="flex items-center">
+              <input 
+                type="checkbox" 
+                id="confirmationRequired"
+                [checked]="formData.appointments?.confirmationRequired"
+                (change)="updateAppointmentSettings({ confirmationRequired: !formData.appointments?.confirmationRequired })"
+                class="mr-2"
+              >
+              <label for="confirmationRequired" class="text-sm text-gray-700 dark:text-gray-300">
+                Require confirmation
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Service Types -->
+      <div class="setting-card">
+        <h3 class="text-lg font-medium mb-4">🛠️ Service Types</h3>
+        <div class="space-y-3">
+          <div 
+            *ngFor="let type of serviceTypes" 
+            class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+          >
+            <span class="text-gray-700 dark:text-gray-300">{{ type }}</span>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="space-y-6">
+      <!-- Resource Management -->
+      <div class="setting-card">
+        <h3 class="text-lg font-medium mb-4">📦 Resource Management</h3>
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <span class="text-gray-700 dark:text-gray-300">Enable Resource Tracking</span>
+            <label class="switch">
+              <input 
+                type="checkbox" 
+                [checked]="formData.resources?.scheduling?.autoAssign"
+                (change)="toggleResourceTracking(!formData.resources?.scheduling?.autoAssign)"
+              >
+              <span class="slider"></span>
+            </label>
+          </div>
+          
+          <div *ngIf="formData.resources?.scheduling?.autoAssign" class="space-y-3">
+            <h4 class="font-medium text-gray-900 dark:text-white">Resource Types</h4>
+            <div class="space-y-2">
+              <div 
+                *ngFor="let type of resourceTypes" 
+                class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+              >
+                <span class="text-gray-700 dark:text-gray-300">{{ type }}</span>
+                <label class="switch">
+                  <input type="checkbox" checked>
+                  <span class="slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="pt-2">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Utilization Target (%)
+              </label>
+              <input 
+                type="number" 
+                [value]="formData.resources?.scheduling?.utilizationTarget || 80"
+                (change)="updateResourceSettings({ scheduling: { 
+  autoAssign: formData.resources?.scheduling?.autoAssign || false,
+  conflictDetection: formData.resources?.scheduling?.conflictDetection || true,
+  optimizationEnabled: formData.resources?.scheduling?.optimizationEnabled || false,
+  utilizationTarget: +$event.target.value 
+} })"
+                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                min="0"
+                max="100"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pricing Strategies -->
+      <div class="setting-card">
+        <h3 class="text-lg font-medium mb-4">💰 Pricing Strategies</h3>
+        <div class="space-y-3">
+          <div 
+            *ngFor="let strategy of pricingStrategies" 
+            class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg"
+          >
+            <span class="text-gray-700 dark:text-gray-300">{{ strategy }}</span>
+            <label class="switch">
+              <input type="checkbox" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scheduling Settings -->
+      <div class="setting-card">
+        <h3 class="text-lg font-medium mb-4">⏰ Scheduling Settings</h3>
+        <div class="space-y-3">
+          <div class="flex items-center">
+            <input 
+              type="checkbox" 
+              id="overlapAllowed"
+              [checked]="formData.scheduling?.overlapAllowed"
+              (change)="updateSchedulingSettings({ overlapAllowed: !formData.scheduling?.overlapAllowed })"
+              class="mr-2"
+            >
+            <label for="overlapAllowed" class="text-sm text-gray-700 dark:text-gray-300">
+              Allow appointment overlap
+            </label>
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              Max Appointments per Day
+            </label>
+            <input 
+              type="number" 
+              [value]="formData.scheduling?.maxAppointments || 20"
+              (change)="updateSchedulingSettings({ maxAppointments: +$event.target.value })"
+              class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+              min="1"
+              max="100"
+            >
+          </div>
+          
+          <div class="flex items-center">
+            <input 
+              type="checkbox" 
+              id="conflictDetection"
+              [checked]="formData.resources?.scheduling?.conflictDetection"
+              (change)="updateResourceSettings({ scheduling: { 
+  autoAssign: formData.resources?.scheduling?.autoAssign || false,
+  conflictDetection: !formData.resources?.scheduling?.conflictDetection,
+  optimizationEnabled: formData.resources?.scheduling?.optimizationEnabled || false,
+  utilizationTarget: formData.resources?.scheduling?.utilizationTarget || 80
+} })"
+              class="mr-2"
+            >
+            <label for="conflictDetection" class="text-sm text-gray-700 dark:text-gray-300">
+              Enable conflict detection
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  } @else {
+    <!-- Basic Service Settings -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="space-y-6">
+        <div class="setting-card">
+          <h3 class="text-lg font-medium mb-4">💰 Tip Options</h3>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Default Tip Percentages
+              </label>
+              <div class="space-y-2">
+                <input 
+                  type="number" 
+                  placeholder="15%"
+                  class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                >
+                <input 
+                  type="number" 
+                  placeholder="18%"
+                  class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                >
+                <input 
+                  type="number" 
+                  placeholder="20%"
+                  class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="space-y-6">
+        <div class="setting-card">
+          <h3 class="text-lg font-medium mb-4">🧾 Service Charge</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-gray-700 dark:text-gray-300">Enable Service Charge</span>
+              <label class="switch">
+                <input type="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                Percentage (%)
+              </label>
+              <input 
+                type="number" 
+                placeholder="15"
+                class="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md"
+                min="0"
+                max="100"
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <div class="mt-8 flex justify-end">
+    <button 
+      (click)="save.emit()"
+      class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-6 rounded-lg transition-colors"
+    >
+      💾 Save Service Settings
+    </button>
+  </div>
+</div>

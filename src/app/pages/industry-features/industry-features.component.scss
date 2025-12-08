@@ -1,0 +1,151 @@
+.industry-features-container {
+  @apply p-6 max-w-7xl mx-auto;
+
+  .header {
+    @apply mb-8;
+
+    h1 {
+      @apply text-3xl font-bold text-gray-900 dark:text-white;
+    }
+
+    p {
+      @apply text-gray-600 dark:text-gray-400;
+    }
+  }
+
+  .tabs-container {
+    @apply mb-8;
+
+    nav {
+      @apply flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1;
+
+      button {
+        @apply relative flex-1 text-sm font-medium rounded-md py-2 px-3 transition-colors;
+
+        &:hover {
+          @apply text-gray-900 dark:text-white;
+        }
+
+        &.active {
+          @apply bg-white dark:bg-gray-900 text-blue-600 dark:text-blue-400 shadow-sm;
+        }
+
+        .tab-icon {
+          @apply mr-2;
+        }
+      }
+    }
+  }
+
+  .content-area {
+    @apply bg-white dark:bg-gray-900 rounded-lg shadow-sm p-6;
+
+    .overview-tab {
+      .feature-card {
+        @apply bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700;
+
+        .card-header {
+          @apply rounded-lg p-4 mb-4;
+
+          h3 {
+            @apply text-lg font-semibold;
+          }
+        }
+
+        .card-content {
+          ul {
+            @apply space-y-2 text-gray-700 dark:text-gray-300;
+
+            li {
+              @apply flex items-center;
+
+              &::before {
+                content: '•';
+                @apply mr-2 text-blue-500;
+              }
+            }
+          }
+
+          .action-btn {
+            @apply w-full py-3 px-4 rounded-lg font-medium transition-colors;
+
+            &.primary {
+              @apply bg-blue-600 hover:bg-blue-700 text-white;
+            }
+
+            &.secondary {
+              @apply bg-gray-600 hover:bg-gray-700 text-white;
+            }
+
+            &.tertiary {
+              @apply bg-green-600 hover:bg-green-700 text-white;
+            }
+          }
+        }
+      }
+    }
+
+    .analytics-tab {
+      .stat-card {
+        @apply bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900 dark:to-blue-800 
+               rounded-lg p-6 text-center border border-blue-200 dark:border-blue-700;
+
+        .stat-value {
+          @apply text-3xl font-bold text-blue-600 dark:text-blue-300 mb-2;
+        }
+
+        .stat-label {
+          @apply text-sm text-blue-600 dark:text-blue-300 opacity-75;
+        }
+      }
+    }
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .industry-features-container {
+    @apply p-4;
+
+    .tabs-container {
+      nav {
+        @apply flex-col space-y-1;
+
+        button {
+          @apply w-full;
+        }
+      }
+    }
+
+    .content-area {
+      @apply p-4;
+
+      .overview-tab {
+        .grid {
+          @apply grid-cols-1 gap-4;
+        }
+      }
+
+      .analytics-tab {
+        .grid {
+          @apply grid-cols-1 gap-4;
+        }
+      }
+    }
+  }
+}
+
+// Dark mode enhancements
+.dark {
+  .industry-features-container {
+    .content-area {
+      .feature-card {
+        @apply border-gray-700;
+
+        .card-header {
+          @apply bg-opacity-20;
+        }
+      }
+    }
+  }
+}

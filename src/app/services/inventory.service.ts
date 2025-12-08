@@ -354,7 +354,7 @@ export class InventoryService {
     if (!stockCount) return null;
 
     const updatedItems = stockCount.items.map(item => {
-      const countedItem = countedItems.find(ci => ci.inventoryItemId === item.id);
+      const countedItem = countedItems.find(ci => ci.inventoryItemId === item.inventoryItemId);
       const countedQuantity = countedItem?.countedQuantity || 0;
       const variance = countedQuantity - item.systemQuantity;
       const varianceValue = variance * item.unitCost;
@@ -632,7 +632,94 @@ export class InventoryService {
   }
 
   private loadMockData(): void {
-    // Mock inventory items would be loaded here
-    // This would typically come from a database
+    // Mock inventory items
+    const mockInventoryItems: InventoryItem[] = [
+      {
+        id: uuid(),
+        productId: 'mock-laptop-id', // This would be replaced with actual product IDs
+        product: {
+          id: 'mock-laptop-id',
+          name: 'Laptop',
+          sku: 'LAPTOP-001',
+          description: 'High-performance laptop',
+          price: 999.99,
+          cost: 600,
+          quantity: 10,
+          category: 'electronics',
+          taxable: true,
+          active: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        currentStock: 15,
+        minimumStock: 5,
+        maximumStock: 50,
+        reorderPoint: 10,
+        reorderQuantity: 25,
+        unitCost: 600,
+        averageCost: 600,
+        lastUpdated: new Date(),
+        location: 'Main Warehouse',
+        status: 'active'
+      },
+      {
+        id: uuid(),
+        productId: 'mock-mouse-id',
+        product: {
+          id: 'mock-mouse-id',
+          name: 'Wireless Mouse',
+          sku: 'MOUSE-001',
+          description: 'Ergonomic wireless mouse',
+          price: 29.99,
+          cost: 15,
+          quantity: 50,
+          category: 'electronics',
+          taxable: true,
+          active: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        currentStock: 8,
+        minimumStock: 10,
+        maximumStock: 100,
+        reorderPoint: 15,
+        reorderQuantity: 50,
+        unitCost: 15,
+        averageCost: 15,
+        lastUpdated: new Date(),
+        location: 'Downtown Store',
+        status: 'active'
+      },
+      {
+        id: uuid(),
+        productId: 'mock-tshirt-id',
+        product: {
+          id: 'mock-tshirt-id',
+          name: 'T-Shirt',
+          sku: 'TSHIRT-001',
+          description: 'Cotton t-shirt',
+          price: 19.99,
+          cost: 8,
+          quantity: 100,
+          category: 'clothing',
+          taxable: true,
+          active: true,
+          createdAt: new Date(),
+          updatedAt: new Date()
+        },
+        currentStock: 0,
+        minimumStock: 20,
+        maximumStock: 200,
+        reorderPoint: 25,
+        reorderQuantity: 100,
+        unitCost: 8,
+        averageCost: 8,
+        lastUpdated: new Date(),
+        location: 'Main Warehouse',
+        status: 'active'
+      }
+    ];
+
+    this.inventoryItems.set(mockInventoryItems);
   }
 }

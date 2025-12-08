@@ -1,0 +1,263 @@
+<div class="business-container">
+  <!-- Header -->
+  <div class="header">
+    <h1 class="text-3xl font-bold text-white">Business Management</h1>
+    <p class="text-slate-400">Configure your business settings and preferences</p>
+  </div>
+
+  <!-- Industry Selection -->
+  <div class="industry-section">
+    <h2 class="text-xl font-semibold text-white mb-4">Business Type</h2>
+    <div class="industry-grid">
+      @for (industry of industryConfigs(); track industry.id) {
+        <div 
+          class="industry-card"
+          [class.border-blue-500]="currentIndustry()?.id === industry.id"
+          [class.border-slate-700]="currentIndustry()?.id !== industry.id"
+          (click)="selectIndustry(industry)"
+        >
+          <div class="industry-icon">
+            @switch (industry.type) {
+              @case ('retail') { 🛍️ }
+              @case ('restaurant') { 🍽️ }
+              @case ('service') { 🔧 }
+            }
+          </div>
+          <h3 class="industry-name">{{ industry.name }}</h3>
+          <p class="industry-description">
+            @switch (industry.type) {
+              @case ('retail') { Retail store operations }
+              @case ('restaurant') { Restaurant and food service }
+              @case ('service') { Service-based business }
+            }
+          </p>
+          <div class="industry-features">
+            @for (feature of industry.features.slice(0, 3); track feature) {
+              <span class="feature-tag">{{ feature }}</span>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Settings Tabs -->
+  @if (currentIndustry()) {
+    <div class="settings-section">
+      <div class="tabs-header">
+        <button 
+          class="tab-button"
+          [class.tab-active]="selectedTab() === 'settings'"
+          (click)="selectedTab.set('settings')"
+        >
+          ⚙️ General Settings
+        </button>
+        <button 
+          class="tab-button"
+          [class.tab-active]="selectedTab() === 'tax'"
+          (click)="selectedTab.set('tax')"
+        >
+          💰 Tax & Pricing
+        </button>
+        <button 
+          class="tab-button"
+          [class.tab-active]="selectedTab() === 'payment'"
+          (click)="selectedTab.set('payment')"
+        >
+          💳 Payment Methods
+        </button>
+        <button 
+          class="tab-button"
+          [class.tab-active]="selectedTab() === 'inventory'"
+          (click)="selectedTab.set('inventory')"
+        >
+          📦 Inventory
+        </button>
+        <button 
+          class="tab-button"
+          [class.tab-active]="selectedTab() === 'customers'"
+          (click)="selectedTab.set('customers')"
+        >
+          👥 Customers
+        </button>
+        <button 
+          class="tab-button"
+          [class.tab-active]="selectedTab() === 'receipts'"
+          (click)="selectedTab.set('receipts')"
+        >
+          🧾 Receipts
+        </button>
+      </div>
+
+      <div class="tab-content">
+        <!-- General Settings -->
+        @if (selectedTab() === 'settings') {
+          <div class="settings-grid">
+            <div class="setting-card">
+              <h3 class="setting-title">Business Information</h3>
+              <div class="setting-form">
+                <label class="form-label">Business Name</label>
+                <input 
+                  type="text" 
+                  class="form-input"
+                  [ngModel]="businessName()"
+                  (ngModelChange)="businessName.set($event)"
+                  placeholder="Enter business name"
+                >
+                
+                <label class="form-label">Business Address</label>
+                <textarea 
+                  class="form-textarea"
+                  [ngModel]="businessAddress()"
+                  (ngModelChange)="businessAddress.set($event)"
+                  placeholder="Enter business address"
+                  rows="3"
+                ></textarea>
+                
+                <label class="form-label">Phone Number</label>
+                <input 
+                  type="tel" 
+                  class="form-input"
+                  [ngModel]="businessPhone()"
+                  (ngModelChange)="businessPhone.set($event)"
+                  placeholder="Enter phone number"
+                >
+                
+                <label class="form-label">Email Address</label>
+                <input 
+                  type="email" 
+                  class="form-input"
+                  [ngModel]="businessEmail()"
+                  (ngModelChange)="businessEmail.set($event)"
+                  placeholder="Enter email address"
+                >
+                
+                <button 
+                  class="save-button"
+                  (click)="updateBusinessSettings()"
+                >
+                  💾 Save Changes
+                </button>
+              </div>
+            </div>
+
+            <div class="setting-card">
+              <h3 class="setting-title">Business Hours</h3>
+              <div class="hours-grid">
+                @for (day of ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']; track day) {
+                  <div class="hour-item">
+                    <span class="day-label">{{ day | titlecase }}</span>
+                    <div class="time-inputs">
+                      <input type="time" class="time-input" placeholder="Open">
+                      <span class="time-separator">to</span>
+                      <input type="time" class="time-input" placeholder="Close">
+                    </div>
+                    <label class="checkbox-label">
+                      <input type="checkbox" class="closed-checkbox"> Closed
+                    </label>
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Tax & Pricing -->
+        @if (selectedTab() === 'tax') {
+          <div class="settings-grid">
+            <div class="setting-card">
+              <h3 class="setting-title">Tax Rates</h3>
+              <div class="tax-grid">
+                @for (tax of Object.entries(currentIndustry()?.settings?.taxRates || {}); track tax[0]) {
+                  <div class="tax-item">
+                    <label class="tax-label">{{ tax[0] | titlecase }} Tax Rate</label>
+                    <div class="tax-input-group">
+                      <input 
+                        type="number" 
+                        class="tax-input"
+                        [value]="tax[1] * 100"
+                        step="0.01"
+                        min="0"
+                        max="100"
+                      >
+                      <span class="tax-percent">%</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <div class="setting-card">
+              <h3 class="setting-title">Pricing Settings</h3>
+              <div class="pricing-options">
+                <label class="checkbox-label">
+                  <input type="checkbox" checked> Auto-calculate profit margins
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" checked> Show profit margin in product list
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox"> Round prices to nearest dollar
+                </label>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Payment Methods -->
+        @if (selectedTab() === 'payment') {
+          <div class="settings-grid">
+            <div class="setting-card">
+              <h3 class="setting-title">Payment Methods</h3>
+              <div class="payment-methods">
+                @for (method of currentIndustry()?.settings?.paymentMethods || []; track method) {
+                  <label class="checkbox-label payment-method">
+                    <input type="checkbox" checked> 
+                    {{ method | titlecase }}
+                  </label>
+                }
+              </div>
+            </div>
+
+            <div class="setting-card">
+              <h3 class="setting-title">Payment Settings</h3>
+              <div class="payment-settings">
+                <label class="checkbox-label">
+                  <input type="checkbox" checked> Require payment confirmation
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox"> Auto-print receipts
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox"> Email receipts to customers
+                </label>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- Other tabs would go here with similar structure -->
+        @if (selectedTab() === 'inventory') {
+          <div class="settings-card">
+            <h3 class="setting-title">Inventory Management</h3>
+            <p class="text-slate-400">Inventory settings will be configured here</p>
+          </div>
+        }
+
+        @if (selectedTab() === 'customers') {
+          <div class="settings-card">
+            <h3 class="setting-title">Customer Settings</h3>
+            <p class="text-slate-400">Customer management settings will be configured here</p>
+          </div>
+        }
+
+        @if (selectedTab() === 'receipts') {
+          <div class="settings-card">
+            <h3 class="setting-title">Receipt Configuration</h3>
+            <p class="text-slate-400">Receipt and printing settings will be configured here</p>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

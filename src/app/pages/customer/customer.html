@@ -1,0 +1,201 @@
+<div class="customer-container">
+  <div class="customer-header">
+    <h2>Customer Management</h2>
+    <div class="search-bar">
+      <input 
+        type="text" 
+        placeholder="Search customers..."
+        [value]="searchQuery()"
+        (input)="searchQuery.set($any($event.target).value); searchCustomers()"
+      />
+      <button (click)="searchCustomers()">Search</button>
+    </div>
+  </div>
+
+  <div class="customer-tabs">
+    <button 
+      [class.active]="selectedTab() === 'customers'"
+      (click)="selectedTab.set('customers')"
+    >
+      Customers
+    </button>
+    <button 
+      [class.active]="selectedTab() === 'groups'"
+      (click)="selectedTab.set('groups')"
+    >
+      Customer Groups
+    </button>
+    <button 
+      [class.active]="selectedTab() === 'loyalty'"
+      (click)="selectedTab.set('loyalty')"
+    >
+      Loyalty Overview
+    </button>
+  </div>
+
+  <div class="tab-content">
+    <!-- Customers Tab -->
+    @if (selectedTab() === 'customers') {
+      <div class="customers-tab">
+        <div class="overview-cards">
+          <div class="card">
+            <h3>Total Customers</h3>
+            <p class="value">{{ getTotalCustomers() }}</p>
+          </div>
+          <div class="card">
+            <h3>Total Loyalty Points</h3>
+            <p class="value">{{ getTotalLoyaltyPoints() | number }}</p>
+          </div>
+          <div class="card">
+            <h3>Total Revenue</h3>
+            <p class="value">${{ getTotalRevenue() | number }}</p>
+          </div>
+          <div class="card">
+            <h3>Avg. Transaction</h3>
+            <p class="value">${{ getAverageTransactionValue() | number:'1.2-2' }}</p>
+          </div>
+        </div>
+
+        <div class="add-customer-form">
+          <h3>Add New Customer</h3>
+          <div class="form-grid">
+            <input type="text" placeholder="Name" [(ngModel)]="newCustomer.name" />
+            <input type="email" placeholder="Email" [(ngModel)]="newCustomer.email" />
+            <input type="tel" placeholder="Phone" [(ngModel)]="newCustomer.phone" />
+            <input type="text" placeholder="Address" [(ngModel)]="newCustomer.address" />
+            <input type="text" placeholder="City" [(ngModel)]="newCustomer.city" />
+            <input type="text" placeholder="State" [(ngModel)]="newCustomer.state" />
+            <input type="text" placeholder="ZIP Code" [(ngModel)]="newCustomer.zipCode" />
+            <button (click)="addCustomer()">Add Customer</button>
+          </div>
+        </div>
+
+        <div class="customers-table">
+          <h3>Customer List</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Loyalty Points</th>
+                <th>Total Spent</th>
+                <th>Transactions</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (customer of customers(); track customer.id) {
+                <tr>
+                  <td>{{ customer.name }}</td>
+                  <td>{{ customer.email || 'N/A' }}</td>
+                  <td>{{ customer.phone || 'N/A' }}</td>
+                  <td>{{ customer.loyaltyPoints }}</td>
+                  <td>${{ customer.totalSpent | number }}</td>
+                  <td>{{ customer.totalTransactions }}</td>
+                  <td>
+                    <button>Edit</button>
+                    <button>View</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- Customer Groups Tab -->
+    @if (selectedTab() === 'groups') {
+      <div class="groups-tab">
+        <div class="add-group-form">
+          <h3>Add New Customer Group</h3>
+          <div class="form-grid">
+            <input type="text" placeholder="Group Name" [(ngModel)]="newGroup.name" />
+            <input type="number" placeholder="Discount %" [(ngModel)]="newGroup.discountPercentage" />
+            <input type="text" placeholder="Description" [(ngModel)]="newGroup.description" />
+            <button (click)="addGroup()">Add Group</button>
+          </div>
+        </div>
+
+        <div class="groups-table">
+          <h3>Customer Groups</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Group Name</th>
+                <th>Discount %</th>
+                <th>Description</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (group of groups(); track group.id) {
+                <tr>
+                  <td>{{ group.name }}</td>
+                  <td>{{ group.discountPercentage }}%</td>
+                  <td>{{ group.description || 'No description' }}</td>
+                  <td>
+                    <button>Edit</button>
+                    <button>View Members</button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    }
+
+    <!-- Loyalty Overview Tab -->
+    @if (selectedTab() === 'loyalty') {
+      <div class="loyalty-tab">
+        <div class="loyalty-stats">
+          <div class="stat-card">
+            <h3>Top Customers by Points</h3>
+            <div class="top-customers">
+              @for (customer of customers() | slice:0:5; track customer.id) {
+                <div class="customer-rank">
+                  <span class="rank">{{ $index + 1 }}</span>
+                  <span class="name">{{ customer.name }}</span>
+                  <span class="points">{{ customer.loyaltyPoints }} pts</span>
+                </div>
+              }
+            </div>
+          </div>
+          
+          <div class="stat-card">
+            <h3>Top Customers by Spending</h3>
+            <div class="top-customers">
+              @for (customer of customers() | slice:0:5; track customer.id) {
+                <div class="customer-rank">
+                  <span class="rank">{{ $index + 1 }}</span>
+                  <span class="name">{{ customer.name }}</span>
+                  <span class="points">${{ customer.totalSpent | number }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+
+        <div class="loyalty-summary">
+          <h3>Loyalty Program Summary</h3>
+          <div class="summary-grid">
+            <div class="summary-item">
+              <span class="label">Total Points Distributed</span>
+              <span class="value">{{ getTotalLoyaltyPoints() | number }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">Average Points per Customer</span>
+              <span class="value">{{ getTotalCustomers() > 0 ? getTotalLoyaltyPoints() / getTotalCustomers() : 0 | number:'1.0-0' }}</span>
+            </div>
+            <div class="summary-item">
+              <span class="label">Points to Revenue Ratio</span>
+              <span class="value">{{ getTotalRevenue() > 0 ? getTotalLoyaltyPoints() / getTotalRevenue() : 0 | number:'1.2-2' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

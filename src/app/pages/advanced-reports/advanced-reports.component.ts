@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChartData, ChartService } from '../../services/chart.service';
+import { BaseChartDirective } from 'ng2-charts';
 
 @Component({
   selector: 'app-advanced-reports',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BaseChartDirective],
   templateUrl: './advanced-reports.component.html',
   styleUrl: './advanced-reports.component.scss'
 })

@@ -1,0 +1,167 @@
+<div class="industry-features-container">
+  <!-- Header -->
+  <div class="header">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+      Industry-Specific Features
+    </h1>
+    <p class="text-gray-600 dark:text-gray-400 mt-2">
+      Configure specialized settings for your {{ currentIndustry()?.name || 'business' }} type
+    </p>
+  </div>
+
+  <!-- Navigation Tabs -->
+  <div class="tabs-container">
+    <nav class="flex space-x-1 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+      <button
+        *ngFor="let tab of getTabs()"
+        [class]="getTabClass(tab.id)"
+        (click)="selectTab(tab.id)"
+      >
+        <span class="tab-icon">{{ tab.icon }}</span>
+        {{ tab.label }}
+      </button>
+    </nav>
+  </div>
+
+  <!-- Content Area -->
+  <div class="content-area">
+    <!-- Overview Tab -->
+    @if (selectedTab() === 'overview') {
+      <div class="overview-tab">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Retail Overview -->
+          @if (isRetail()) {
+            <div class="feature-card">
+              <div class="card-header bg-blue-100 dark:bg-blue-900">
+                <h3 class="text-lg font-semibold">🛍️ Retail Features</h3>
+              </div>
+              <div class="card-content">
+                <ul class="space-y-2">
+                  <li>• Product Catalog Management</li>
+                  <li>• Pricing Strategies</li>
+                  <li>• Promotions & Discounts</li>
+                  <li>• Returns & Exchanges</li>
+                  <li>• Gift Cards</li>
+                  <li>• Loyalty Programs</li>
+                </ul>
+              </div>
+            </div>
+          }
+
+          <!-- Restaurant Overview -->
+          @if (isRestaurant()) {
+            <div class="feature-card">
+              <div class="card-header bg-green-100 dark:bg-green-900">
+                <h3 class="text-lg font-semibold">🍽️ Restaurant Features</h3>
+              </div>
+              <div class="card-content">
+                <ul class="space-y-2">
+                  <li>• Table Management</li>
+                  <li>• Menu Configuration</li>
+                  <li>• Kitchen Display System</li>
+                  <li>• Delivery & Takeout</li>
+                  <li>• Reservations</li>
+                  <li>• Service Charges & Tips</li>
+                </ul>
+              </div>
+            </div>
+          }
+
+          <!-- Service Overview -->
+          @if (isService()) {
+            <div class="feature-card">
+              <div class="card-header bg-purple-100 dark:bg-purple-900">
+                <h3 class="text-lg font-semibold">🔧 Service Features</h3>
+              </div>
+              <div class="card-content">
+                <ul class="space-y-2">
+                  <li>• Appointment Scheduling</li>
+                  <li>• Resource Management</li>
+                  <li>• Service Pricing</li>
+                  <li>• Staff Scheduling</li>
+                  <li>• Customer Notifications</li>
+                  <li>• Service Packages</li>
+                </ul>
+              </div>
+            </div>
+          }
+
+          <!-- Quick Actions -->
+          <div class="feature-card">
+            <div class="card-header bg-gray-100 dark:bg-gray-800">
+              <h3 class="text-lg font-semibold">⚡ Quick Actions</h3>
+            </div>
+            <div class="card-content">
+              <div class="space-y-3">
+                <button class="action-btn primary">
+                  📊 Generate Reports
+                </button>
+                <button class="action-btn secondary">
+                  ⚙️ Configure Settings
+                </button>
+                <button class="action-btn tertiary">
+                  📋 View Documentation
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Retail Settings -->
+    @if (selectedTab() === 'retail' && isRetail()) {
+      <app-retail-settings
+        [config]="currentIndustry()"
+        [formData]="retailForm()"
+        (save)="saveRetailSettings()"
+        (update)="updateRetailForm($event.key, $event.value)"
+      ></app-retail-settings>
+    }
+
+    <!-- Restaurant Settings -->
+    @if (selectedTab() === 'restaurant' && isRestaurant()) {
+      <app-restaurant-settings
+        [config]="currentIndustry()"
+        [formData]="restaurantForm()"
+        (save)="saveRestaurantSettings()"
+        (update)="updateRestaurantForm($event.key, $event.value)"
+      ></app-restaurant-settings>
+    }
+
+    <!-- Service Settings -->
+    @if (selectedTab() === 'service' && isService()) {
+      <app-service-settings
+        [config]="currentIndustry()"
+        [formData]="serviceForm()"
+        (save)="saveServiceSettings()"
+        (update)="handleServiceUpdate($event)"
+      ></app-service-settings>
+    }
+
+    <!-- Analytics Tab -->
+    @if (selectedTab() === 'analytics') {
+      <div class="analytics-tab">
+        <h2 class="text-xl font-semibold mb-6">📈 Industry Analytics</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="stat-card">
+            <div class="stat-value">87%</div>
+            <div class="stat-label">Feature Utilization</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">24/7</div>
+            <div class="stat-label">System Availability</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">95%</div>
+            <div class="stat-label">Customer Satisfaction</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">12%</div>
+            <div class="stat-label">Revenue Growth</div>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

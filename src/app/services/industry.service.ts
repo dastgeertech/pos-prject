@@ -24,7 +24,7 @@ export interface IndustrySettings {
   // Industry-specific settings
   retail?: RetailSettings;
   restaurant?: RestaurantSettings;
-  service?: ServiceSettings;
+  service?: ServiceSettings | AppointmentServiceSettings;
 }
 
 export interface ReceiptOptions {
@@ -390,7 +390,7 @@ export interface CancellationPolicy {
 }
 
 // Service-specific interfaces
-export interface ServiceSettings {
+export interface AppointmentServiceSettings {
   appointments: AppointmentSettings;
   scheduling: SchedulingSettings;
   resources: ResourceSettings;
@@ -568,6 +568,11 @@ export class IndustryService {
   // Computed signals
   industryConfigs$ = computed(() => this.industryConfigs());
   currentIndustry$ = computed(() => this.currentIndustry());
+
+  // Public methods
+  setCurrentIndustry(industry: IndustryConfig) {
+    this.currentIndustry.set(industry);
+  }
 
   constructor() {
     this.initializeIndustryConfigs();
@@ -777,7 +782,7 @@ export class IndustryService {
       industryId,
       appointment.resourceId,
       appointment.startTime,
-      appointment.duration || config.settings.service.appointments.duration
+      appointment.duration || (this.isAppointmentServiceSettings(config.settings.service) ? config.settings.service.appointments.duration : 60)
     );
 
     if (!isAvailable) {
@@ -815,7 +820,7 @@ export class IndustryService {
     const config = this.industryConfigs().find(c => c.id === industryId && c.type === 'service');
     if (!config || !config.settings.service) return 0;
 
-    const strategy = config.settings.service.pricing.strategies.find(s => s.id === strategyId);
+    const strategy = this.isAppointmentServiceSettings(config.settings.service) ? config.settings.service.pricing.strategies.find((s: ServicePricingStrategy) => s.id === strategyId) : undefined;
     if (!strategy) return 0;
 
     let price = strategy.baseRate;
@@ -1109,78 +1114,6 @@ export class IndustryService {
             }
           },
           service: {
-            appointments: {
-              duration: 120, // Restaurant reservations typically 2 hours
-              bufferTime: 30,
-              advanceBooking: 30,
-              cancellationPolicy: {
-                timeLimit: 2,
-                fee: 25,
-                feeType: 'fixed',
-                noShowFee: 50
-              },
-              confirmationRequired: true,
-              depositRequired: false,
-              depositAmount: 0
-            },
-            scheduling: {
-              businessHours: {
-                monday: { open: '11:00', close: '22:00' },
-                tuesday: { open: '11:00', close: '22:00' },
-                wednesday: { open: '11:00', close: '22:00' },
-                thursday: { open: '11:00', close: '22:00' },
-                friday: { open: '11:00', close: '23:00' },
-                saturday: { open: '10:00', close: '23:00' },
-                sunday: { open: '10:00', close: '21:00' }
-              },
-              breaks: [],
-              holidays: [],
-              maxAppointments: 50, // Table reservations
-              overlapAllowed: true
-            },
-            resources: {
-              resources: [], // Tables, staff, equipment
-              scheduling: {
-                autoAssign: true,
-                conflictDetection: true,
-                optimizationEnabled: true,
-                utilizationTarget: 85
-              },
-              utilization: {
-                trackingEnabled: true,
-                reportingFrequency: 'daily',
-                alerts: [
-                  { type: 'underutilized', threshold: 70, enabled: true },
-                  { type: 'overutilized', threshold: 95, enabled: true }
-                ]
-              }
-            },
-            pricing: {
-              strategies: [],
-              packages: [], // Meal packages, group deals
-              discounts: []
-            },
-            notifications: {
-              reminders: {
-                enabled: true,
-                timing: [24, 2], // 24 hours and 2 hours before
-                channels: ['email', 'sms'],
-                template: 'Reminder: Your reservation is scheduled for {time}'
-              },
-              confirmations: {
-                enabled: true,
-                timing: 5, // 5 minutes after booking
-                channels: ['email'],
-                requireResponse: false
-              },
-              marketing: {
-                enabled: true,
-                promotions: true,
-                newsletters: true,
-                frequency: 'weekly',
-                consentRequired: true
-              }
-            },
             tipOptions: [
               { percentage: 15, label: 'Good', isDefault: true },
               { percentage: 18, label: 'Great', isDefault: false },
@@ -1375,5 +1308,9 @@ export class IndustryService {
 
     this.industryConfigs.set([retailConfig, restaurantConfig, serviceConfig]);
     this.currentIndustry.set(retailConfig);
+  }
+
+  private isAppointmentServiceSettings(settings: ServiceSettings | AppointmentServiceSettings): settings is AppointmentServiceSettings {
+    return (settings as AppointmentServiceSettings).appointments !== undefined;
   }
 }

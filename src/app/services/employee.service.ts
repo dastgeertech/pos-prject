@@ -613,7 +613,7 @@ export class EmployeeService {
     
     if (!employee || !role) return false;
 
-    this.updateEmployee(employeeId, { roleId, permissions: role.permissions });
+    this.updateEmployee(employeeId, { permissions: role.permissions });
     return true;
   }
 
@@ -653,11 +653,9 @@ export class EmployeeService {
             date: new Date(currentDate),
             startTime: template.startTime,
             endTime: template.endTime,
-            shiftType: 'regular',
-            location: 'Main Store',
+            shiftType: 'morning',
             status: 'scheduled',
-            notes: `Generated from ${template.name} template`,
-            createdAt: new Date()
+            notes: `Generated from ${template.name} template`
           };
           schedules.push(schedule);
         }
@@ -815,7 +813,7 @@ export class EmployeeService {
       .filter(entry => 
         entry.employeeId === employeeId &&
         entry.clockIn >= dateRange.start &&
-        entry.clockOut <= dateRange.end
+        entry.clockOut && entry.clockOut <= dateRange.end
       );
 
     const totalDays = Math.ceil((dateRange.end.getTime() - dateRange.start.getTime()) / (1000 * 60 * 60 * 24));
@@ -865,7 +863,7 @@ export class EmployeeService {
     if (conflictingSchedules.length > 0) {
       this.createAttendanceAlert({
         employeeId: request.employeeId,
-        type: 'unapproved_absence',
+        type: 'pattern_detected',
         date: request.startDate,
         details: `Time off request conflicts with ${conflictingSchedules.length} scheduled shifts`,
         severity: 'medium',
@@ -883,7 +881,7 @@ export class EmployeeService {
       );
 
       if (existingSchedule) {
-        this.updateSchedule(existingSchedule.id, { status: 'time_off' });
+        this.updateSchedule(existingSchedule.id, { status: 'absent' });
       }
 
       currentDate.setDate(currentDate.getDate() + 1);

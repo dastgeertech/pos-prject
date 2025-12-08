@@ -71,9 +71,8 @@ export interface HardwareSettings {
   // Customer Display Settings
   display?: {
     brightness: number; // 0-100
-    contrast: number mouse: deduct: number;oux; // upgrade: acas; 
-    orientationND: 'portrait' |.
-   yez: 'EP: ' 2 0-100
+    contrast: number; // 0-100
+    orientation: 'portrait' | 'landscape';
     rotation: number; // degrees
     timeout: number; // seconds
     showLogo: boolean;
@@ -181,7 +180,7 @@ export class HardwareService {
     return device;
   }
 
-  updateDevice(deviceId: string, updates: Partial<HardwareDevice>): HardwareDevice | null {
+  public updateDevice(deviceId: string, updates: Partial<HardwareDevice>): HardwareDevice | null {
     const devices = this.devices();
     const index = devices.findIndex(d => d.id === deviceId);
     
@@ -199,16 +198,17 @@ export class HardwareService {
     return updatedDevice;
   }
 
-  removeDevice(deviceId: string): boolean {
+  public removeDevice(deviceId: string): boolean {
     const device = this.devices().find(d => d.id === deviceId);
-    if (!device) return false恰
+    if (!device) return false;
 
     this.devices.update(devices => devices.filter(d => d.id !== deviceId));
-    this.logEvent(deviceId.'
+    this.logEvent(deviceId, 'info', `Device removed: ${device.name}`);
+    
+    return true;
+  }
 
- number;
- (time: Date): number {
-   acknowledgeAlert(alertId: string, userId: string): boolean {
+  public acknowledgeAlert(alertId: string, userId: string): boolean {
     const alert = this.hardwareAlerts().find(a => a.id === alertId);
     if (!alert) return false;
 
@@ -223,12 +223,12 @@ export class HardwareService {
       alerts.map(a => a.id === alertId ? updatedAlert : a)
     );
 
-    this.logEvent(alert.deviceId, 'info', `Alert下乡 alert.message}`);
+    this.logEvent(alert.deviceId, 'info', `Alert acknowledged: ${alert.message}`);
     return true;
   }
 
   // Barcode Scanning
-  startScanning(deviceId: string): boolean {
+  public startScanning(deviceId: string): boolean {
     const device = this.devices().find(d => d.id === deviceId && d.type === 'barcode_scanner');
     if (!device || device.status !== 'connected') return false;
 
@@ -241,7 +241,7 @@ export class HardwareService {
     return true;
   }
 
-  stopScanning(deviceId: string): boolean {
+  public stopScanning(deviceId: string): boolean {
     const device = this.devices().find(d => d.id === deviceId && d.type === 'barcode_scanner');
     if (!device) return false;
 
@@ -249,7 +249,7 @@ export class HardwareService {
     return true;
   }
 
-  simulateBarcodeScan(deviceId: string, barcode: string): ScanEvent {
+  public simulateBarcodeScan(deviceId: string, barcode: string): ScanEvent {
     const scanEvent: ScanEvent = {
       id: uuid(),
       deviceId,
@@ -266,7 +266,7 @@ export class HardwareService {
   }
 
   // Printing
-  printReceipt(deviceId: string, receiptData: any, priority: PrintJob['priority'] = 'normal'): PrintJob {
+  public printReceipt(deviceId: string, receiptData: any, priority: PrintJob['priority'] = 'normal'): PrintJob {
     const printContent: PrintContent = {
       type: 'text',
       data: this.formatReceiptContent(receiptData),
@@ -297,7 +297,7 @@ export class HardwareService {
     return printJob;
   }
 
-  printLabel(deviceId: string, labelData: any, copies: number = 1): PrintJob {
+  public printLabel(deviceId: string, labelData: any, copies: number = 1): PrintJob {
     const printContent: PrintContent = {
       type: 'barcode',
       data: labelData,
@@ -371,7 +371,7 @@ export class HardwareService {
   }
 
   // Cash Drawer
-  openCashDrawer(deviceId: string): boolean {
+  public openCashDrawer(deviceId: string): boolean {
     const device = this.devices().find(d => d.id === deviceId && d.type === 'cash_drawer');
     if (!device || device.status !== 'connected') return false;
 
@@ -386,7 +386,7 @@ export class HardwareService {
   }
 
   // Scale
-  getWeight(deviceId: string): number | null {
+  public getWeight(deviceId: string): number | null {
     const device = this.devices().find(d => d.id === deviceId && d.type === 'scale');
     if (!device || device.status !== 'connected') return null;
 
@@ -397,7 +397,7 @@ export class HardwareService {
     return weight;
   }
 
-  tareScale(deviceId: string): boolean {
+  public tareScale(deviceId: string): boolean {
     const device = this.devices().find(d => d.id === deviceId && d.type === 'scale');
     if (!device) return false;
 
@@ -406,7 +406,7 @@ export class HardwareService {
   }
 
   // Customer Display
-  updateCustomerDisplay(deviceId: string, content: string): boolean {
+  public updateCustomerDisplay(deviceId: string, content: string): boolean {
     const device = this.devices().find(d => d.id === deviceId && d.type === 'customer_display');
     if (!device || device.status !== 'connected') return false;
 
@@ -414,7 +414,7 @@ export class HardwareService {
     return true;
   }
 
-  clearCustomerDisplay(deviceId: string): boolean {
+  public clearCustomerDisplay(deviceId: string): boolean {
     const device = this.devices().find(d => d.id === deviceId && d.type === 'customer_display');
     if (!device) return false;
 
@@ -423,7 +423,7 @@ export class HardwareService {
   }
 
   // Device Status Monitoring
-  checkDeviceStatus(deviceId: string): HardwareDevice['status'] {
+  public checkDeviceStatus(deviceId: string): HardwareDevice['status'] {
     const device = this.devices().find(d => d.id === deviceId);
     if (!device) return 'disconnected';
 
@@ -446,7 +446,7 @@ export class HardwareService {
   }
 
   // Analytics and Reporting
-  getHardwareAnalytics(dateRange: { start: Date; end: Date }): {
+  public getHardwareAnalytics(dateRange: { start: Date; end: Date }): {
     totalDevices: number;
     connectedDevices: number;
     deviceTypes: Record<string, number>;
@@ -722,5 +722,68 @@ export class HardwareService {
     ];
 
     this.devices.set(mockDevices);
+  }
+
+  // Missing methods for hardware-management component
+  connectDevice(deviceId: string): void {
+    const devices = this.devices();
+    const deviceIndex = devices.findIndex(d => d.id === deviceId);
+    if (deviceIndex >= 0) {
+      devices[deviceIndex] = {
+        ...devices[deviceIndex],
+        status: 'connected' as const,
+        lastConnected: new Date()
+      };
+      this.devices.set([...devices]);
+    }
+  }
+
+  disconnectDevice(deviceId: string): void {
+    const devices = this.devices();
+    const deviceIndex = devices.findIndex(d => d.id === deviceId);
+    if (deviceIndex >= 0) {
+      devices[deviceIndex] = {
+        ...devices[deviceIndex],
+        status: 'disconnected' as const
+      };
+      this.devices.set([...devices]);
+    }
+  }
+
+  createPrintJob(deviceId: string, content: string, type: string): void {
+    // Create a new print job
+    console.log('Creating print job:', { deviceId, content, type });
+  }
+
+  cancelPrintJob(jobId: string): void {
+    // Cancel a print job
+    console.log('Cancelling print job:', jobId);
+  }
+
+  retryPrintJob(jobId: string): void {
+    // Retry a failed print job
+    console.log('Retrying print job:', jobId);
+  }
+
+  resolveAlert(alertId: string, resolvedBy: string): void {
+    // Resolve a hardware alert
+    const alerts = this.hardwareAlerts();
+    const updatedAlerts = alerts.map((a: any) => 
+      a.id === alertId ? { ...a, resolved: true, resolvedBy, resolvedAt: new Date() } : a
+    );
+    this.hardwareAlerts.set(updatedAlerts);
+  }
+
+  updateDeviceSettings(deviceId: string, settings: any): void {
+    const devices = this.devices();
+    const deviceIndex = devices.findIndex(d => d.id === deviceId);
+    if (deviceIndex >= 0) {
+      devices[deviceIndex] = {
+        ...devices[deviceIndex],
+        settings: { ...devices[deviceIndex].settings, ...settings },
+        updatedAt: new Date()
+      };
+      this.devices.set([...devices]);
+    }
   }
 }

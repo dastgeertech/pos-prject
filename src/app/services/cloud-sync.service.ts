@@ -245,7 +245,11 @@ export class CloudSyncService {
 
     // Queue for sync if dirty
     if (isDirty && this.cloudSettings().autoSync) {
-      this.queueSyncOperation('upload', entityType, entityId, data);
+      // Validate entityType is allowed for sync operations
+      const validEntityTypes: SyncOperation['entityType'][] = ['product', 'customer', 'sale', 'inventory', 'employee', 'settings'];
+      if (validEntityTypes.includes(entityType as SyncOperation['entityType'])) {
+        this.queueSyncOperation('upload', entityType as SyncOperation['entityType'], entityId, data);
+      }
     }
   }
 
@@ -557,7 +561,7 @@ export class CloudSyncService {
 
   private queueSyncOperation(
     type: SyncOperation['type'],
-    entityType: string,
+    entityType: SyncOperation['entityType'],
     entityId: string,
     data: any,
     priority: SyncOperation['priority'] = 'normal'
@@ -806,7 +810,7 @@ export class CloudSyncService {
     }
   }
 
-  private saveOfflineData(): void {
+  private saveOfflineDataToLocalStorage(): void {
     // Save to localStorage
     try {
       const data = {
@@ -817,6 +821,68 @@ export class CloudSyncService {
     } catch (error) {
       console.error('Failed to save offline data:', error);
     }
+  }
+
+  // Missing methods for cloud-features component
+  retryOperation(operationId: string): void {
+    // Retry a failed sync operation
+    console.log('Retrying operation:', operationId);
+  }
+
+  cancelOperation(operationId: string): void {
+    // Cancel a pending operation
+    console.log('Cancelling operation:', operationId);
+  }
+
+  updateSettings(settings: any): void {
+    // Update cloud sync settings
+    this.cloudSettings.set({ ...this.cloudSettings(), ...settings });
+    this.saveOfflineDataToLocalStorage();
+  }
+
+  updateDeviceSettings(deviceId: string, settings: any): void {
+    // Update specific device settings
+    const devices = this.mobileDevices();
+    const deviceIndex = devices.findIndex(d => d.deviceId === deviceId);
+    if (deviceIndex >= 0) {
+      devices[deviceIndex] = { ...devices[deviceIndex], settings: { ...devices[deviceIndex].settings, ...settings } };
+      this.saveOfflineDataToLocalStorage();
+    }
+  }
+
+  deleteBackup(backupId: string): void {
+    // Delete a backup
+    const backups = this.backupRecords();
+    const filteredBackups = backups.filter((b: any) => b.id !== backupId);
+    this.backupRecords.set(filteredBackups);
+  }
+
+  markNotificationAsRead(notificationId: string): void {
+    // Mark a notification as read
+    const notifications = this.pushNotifications();
+    const updatedNotifications = notifications.map((n: any) => 
+      n.id === notificationId ? { ...n, read: true } : n
+    );
+    this.pushNotifications.set(updatedNotifications);
+  }
+
+  clearAllNotifications(): void {
+    // Clear all notifications
+    this.pushNotifications.set([]);
+  }
+
+  pauseSync(): void {
+    // Pause sync operations
+    this.syncStatus.set({ 
+      isOnline: false, 
+      lastSync: new Date(), 
+      pendingUploads: 0, 
+      pendingDownloads: 0, 
+      syncInProgress: false, 
+      syncErrors: [], 
+      connectionType: 'none', 
+      connectionSpeed: 'unknown' 
+    });
   }
 
   private initializeCurrentDevice(): void {

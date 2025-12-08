@@ -251,10 +251,11 @@ export class CRMService {
       email: customerData.email || '',
       phone: customerData.phone || '',
       loyaltyPoints: 0,
+      totalSpent: 0,
+      totalTransactions: 0,
       customerSince: new Date(),
       lastVisitDate: new Date(),
       visitCount: 0,
-      totalSpent: 0,
       averageTransactionValue: 0,
       favoriteProducts: [],
       preferredCommunication: 'email',
@@ -266,7 +267,9 @@ export class CRMService {
       addresses: [],
       paymentMethods: [],
       appointments: [],
-      subscriptions: []
+      subscriptions: [],
+      createdAt: new Date(),
+      updatedAt: new Date()
     };
 
     this.customers.update(customers => [...customers, customer]);

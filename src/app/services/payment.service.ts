@@ -82,7 +82,7 @@ export interface PaymentMethodDetails {
   accountNumber?: string;
   
   // Gift Card
-  cardNumber?: string;
+  giftCardNumber?: string;
   pin?: string;
   balance?: number;
   
@@ -161,8 +161,7 @@ export class PaymentService {
       
       const updatedTransaction = {
         ...transaction,
-        ...result,
-        status: 'completed',
+        status: 'completed' as const,
         processedAt: new Date(),
         updatedAt: new Date()
       };
@@ -172,7 +171,7 @@ export class PaymentService {
     } catch (error) {
       const failedTransaction = {
         ...transaction,
-        status: 'failed',
+        status: 'failed' as const,
         failureReason: error instanceof Error ? error.message : 'Unknown error',
         updatedAt: new Date()
       };
@@ -240,7 +239,7 @@ export class PaymentService {
       
       const processedRefund = {
         ...refund,
-        status: 'processed',
+        status: 'processed' as const,
         processedAt: new Date()
       };
 
@@ -249,7 +248,7 @@ export class PaymentService {
     } catch (error) {
       const failedRefund = {
         ...refund,
-        status: 'failed'
+        status: 'failed' as const
       };
 
       this.updateRefund(failedRefund);
@@ -276,7 +275,7 @@ export class PaymentService {
         break;
 
       case 'gift_card':
-        if (!paymentMethod.details.cardNumber) errors.push('Gift card number is required');
+        if (!paymentMethod.details.giftCardNumber) errors.push('Gift card number is required');
         break;
 
       case 'digital_wallet':
@@ -490,13 +489,20 @@ export class PaymentService {
   }
 
   private initializeProcessors(): void {
+    // Get reference to payment methods
+    const methods = this.paymentMethods();
+    const creditCardMethod = methods.find(m => m.id === 'credit_card');
+    const debitCardMethod = methods.find(m => m.id === 'debit_card');
+    const applePayMethod = methods.find(m => m.id === 'apple_pay');
+    const googlePayMethod = methods.find(m => m.id === 'google_pay');
+
     const processors: PaymentProcessor[] = [
       {
         id: 'stripe',
         name: 'Stripe',
         type: 'credit_card',
         isActive: true,
-        supportedMethods: ['credit_card', 'debit_card'],
+        supportedMethods: [creditCardMethod!, debitCardMethod!].filter(Boolean),
         fees: { flat: 0.30, percentage: 2.9 },
         config: {
           environment: 'test',
@@ -508,7 +514,7 @@ export class PaymentService {
         name: 'PayPal',
         type: 'digital_wallet',
         isActive: true,
-        supportedMethods: ['digital_wallet'],
+        supportedMethods: [applePayMethod!, googlePayMethod!].filter(Boolean),
         fees: { flat: 0.30, percentage: 2.9 },
         config: {
           environment: 'test',
@@ -520,7 +526,7 @@ export class PaymentService {
         name: 'Square',
         type: 'credit_card',
         isActive: true,
-        supportedMethods: ['credit_card', 'debit_card'],
+        supportedMethods: [creditCardMethod!, debitCardMethod!].filter(Boolean),
         fees: { flat: 0.10, percentage: 2.6 },
         config: {
           environment: 'test',

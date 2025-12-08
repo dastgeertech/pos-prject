@@ -1,0 +1,480 @@
+<div class="employees-container">
+  <!-- Header -->
+  <div class="header">
+    <h1 class="text-3xl font-bold text-white">Employee Management</h1>
+    <p class="text-slate-400">Manage your team members, schedules, and performance</p>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card bg-slate-800 border-l-4 border-blue-500">
+      <div class="stat-content">
+        <h3 class="stat-title">Total Employees</h3>
+        <p class="stat-value">{{ employeeStats().total }}</p>
+      </div>
+      <div class="stat-icon">👥</div>
+    </div>
+
+    <div class="stat-card bg-slate-800 border-l-4 border-green-500">
+      <div class="stat-content">
+        <h3 class="stat-title">Active</h3>
+        <p class="stat-value">{{ employeeStats().active }}</p>
+      </div>
+      <div class="stat-icon">✅</div>
+    </div>
+
+    <div class="stat-card bg-slate-800 border-l-4 border-yellow-500">
+      <div class="stat-content">
+        <h3 class="stat-title">On Leave</h3>
+        <p class="stat-value">{{ employeeStats().onLeave }}</p>
+      </div>
+      <div class="stat-icon">🏖️</div>
+    </div>
+
+    <div class="stat-card bg-slate-800 border-l-4 border-red-500">
+      <div class="stat-content">
+        <h3 class="stat-title">Inactive</h3>
+        <p class="stat-value">{{ employeeStats().inactive }}</p>
+      </div>
+      <div class="stat-icon">❌</div>
+    </div>
+  </div>
+
+  <!-- Search and Filters -->
+  <div class="filters-section">
+    <div class="search-box">
+      <input
+        type="text"
+        placeholder="Search employees..."
+        [value]="searchTerm()"
+        (input)="onSearchChange($any($event.target).value)"
+        class="search-input"
+      />
+      <span class="search-icon">🔍</span>
+    </div>
+
+    <div class="filter-group">
+      <select 
+        [value]="statusFilter()" 
+        (change)="onStatusFilterChange($any($event.target).value)"
+        class="filter-select"
+      >
+        <option value="all">All Status</option>
+        <option value="active">Active</option>
+        <option value="inactive">Inactive</option>
+        <option value="onLeave">On Leave</option>
+      </select>
+
+      <select 
+        [value]="positionFilter()" 
+        (change)="onPositionFilterChange($any($event.target).value)"
+        class="filter-select"
+      >
+        <option value="all">All Positions</option>
+        <option value="cashier">Cashier</option>
+        <option value="manager">Manager</option>
+        <option value="supervisor">Supervisor</option>
+        <option value="stock">Stock</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+
+    <button 
+      class="add-button"
+      (click)="openEmployeeModal()"
+    >
+      + Add Employee
+    </button>
+  </div>
+
+  <!-- Tabs Navigation -->
+  <div class="tabs-navigation">
+    <button 
+      [class.active]="activeTab() === 'employees'"
+      (click)="setActiveTab('employees')"
+      class="tab-button"
+    >
+      👥 Employees
+    </button>
+    <button 
+      [class.active]="activeTab() === 'schedules'"
+      (click)="setActiveTab('schedules')"
+      class="tab-button"
+    >
+      📅 Schedules
+    </button>
+    <button 
+      [class.active]="activeTab() === 'timeoff'"
+      (click)="setActiveTab('timeoff')"
+      class="tab-button"
+    >
+      🏖️ Time Off
+    </button>
+    <button 
+      [class.active]="activeTab() === 'performance'"
+      (click)="setActiveTab('performance')"
+      class="tab-button"
+    >
+      📊 Performance
+    </button>
+    <button 
+      [class.active]="activeTab() === 'training'"
+      (click)="setActiveTab('training')"
+      class="tab-button"
+    >
+      🎓 Training
+    </button>
+    <button 
+      [class.active]="activeTab() === 'payroll'"
+      (click)="setActiveTab('payroll')"
+      class="tab-button"
+    >
+      💰 Payroll
+    </button>
+  </div>
+
+  <!-- Content Area -->
+  <div class="content-area">
+    <!-- Employees Tab -->
+    @if (activeTab() === 'employees') {
+      <div class="employees-tab">
+        @if (filteredEmployees().length === 0) {
+          <div class="empty-state">
+            <div class="empty-icon">👥</div>
+            <h3 class="empty-title">No employees found</h3>
+            <p class="empty-description">Try adjusting your search criteria or add a new employee.</p>
+          </div>
+        } @else {
+          <div class="employees-table-container">
+            <table class="employees-table">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Position</th>
+                  <th>Department</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Status</th>
+                  <th>Hire Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (employee of filteredEmployees(); track employee.id) {
+                  <tr class="employee-row">
+                    <td>
+                      <div class="employee-name">
+                        <div class="avatar">{{ employee.firstName.charAt(0) }}{{ employee.lastName.charAt(0) }}</div>
+                        <div>
+                          <div class="full-name">{{ employee.firstName }} {{ employee.lastName }}</div>
+                          <div class="employee-id">ID: {{ employee.id.slice(0, 8) }}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="position-badge" [class]="getPositionClass(employee.position)">
+                        {{ employee.position }}
+                      </span>
+                    </td>
+                    <td>{{ employee.department }}</td>
+                    <td>{{ employee.email }}</td>
+                    <td>{{ employee.phone }}</td>
+                    <td>
+                      <span class="status-badge" [class]="getStatusClass(employee.status)">
+                        {{ employee.status }}
+                      </span>
+                    </td>
+                    <td>{{ formatDate(employee.hireDate) }}</td>
+                    <td>
+                      <div class="action-buttons">
+                        <button 
+                          (click)="openEmployeeModal(employee)"
+                          class="action-btn edit"
+                          title="Edit Employee"
+                        >
+                          ✏️
+                        </button>
+                        <button 
+                          (click)="deleteEmployee(employee)"
+                          class="action-btn delete"
+                          title="Delete Employee"
+                        >
+                          🗑️
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Other Tabs Placeholder -->
+    @if (activeTab() !== 'employees') {
+      <div class="tab-placeholder">
+        <div class="placeholder-icon">
+          @switch (activeTab()) {
+            @case ('schedules') { 📅 }
+            @case ('timeoff') { 🏖️ }
+            @case ('performance') { 📊 }
+            @case ('training') { 🎓 }
+            @case ('payroll') { 💰 }
+          }
+        </div>
+        <h3 class="placeholder-title">
+          @switch (activeTab()) {
+            @case ('schedules') { Employee Schedules }
+            @case ('timeoff') { Time Off Management }
+            @case ('performance') { Performance Reviews }
+            @case ('training') { Training Records }
+            @case ('payroll') { Payroll Management }
+          }
+        </h3>
+        <p class="placeholder-description">
+          This section is coming soon. Focused on core employee management first.
+        </p>
+      </div>
+    }
+  </div>
+
+  <!-- Employee Modal -->
+  @if (showEmployeeModal()) {
+    <div class="modal-overlay" (click)="closeModal()">
+      <div class="modal-content" (click)="$event.stopPropagation()">
+        <div class="modal-header">
+          <h2 class="modal-title">
+            {{ selectedEmployee() ? 'Edit Employee' : 'Add New Employee' }}
+          </h2>
+          <button (click)="closeModal()" class="modal-close">×</button>
+        </div>
+
+        <div class="modal-body">
+          <form (submit)="selectedEmployee() ? updateEmployee() : addEmployee()" class="employee-form">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="firstName">First Name *</label>
+                <input
+                  type="text"
+                  id="firstName"
+                  [(ngModel)]="newEmployee.firstName"
+                  name="firstName"
+                  required
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="lastName">Last Name *</label>
+                <input
+                  type="text"
+                  id="lastName"
+                  [(ngModel)]="newEmployee.lastName"
+                  name="lastName"
+                  required
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  [(ngModel)]="newEmployee.email"
+                  name="email"
+                  required
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  [(ngModel)]="newEmployee.phone"
+                  name="phone"
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="position">Position</label>
+                <select
+                  id="position"
+                  [(ngModel)]="newEmployee.position"
+                  name="position"
+                  class="form-select"
+                >
+                  <option value="cashier">Cashier</option>
+                  <option value="manager">Manager</option>
+                  <option value="supervisor">Supervisor</option>
+                  <option value="stock">Stock</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="department">Department</label>
+                <input
+                  type="text"
+                  id="department"
+                  [(ngModel)]="newEmployee.department"
+                  name="department"
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="salary">Salary</label>
+                <input
+                  type="number"
+                  id="salary"
+                  [(ngModel)]="newEmployee.salary"
+                  name="salary"
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="hourlyRate">Hourly Rate</label>
+                <input
+                  type="number"
+                  id="hourlyRate"
+                  [(ngModel)]="newEmployee.hourlyRate"
+                  name="hourlyRate"
+                  step="0.01"
+                  class="form-input"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="status">Status</label>
+                <select
+                  id="status"
+                  [(ngModel)]="newEmployee.status"
+                  name="status"
+                  class="form-select"
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="onLeave">On Leave</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="hireDate">Hire Date</label>
+                <input
+                  type="date"
+                  id="hireDate"
+                  [value]="newEmployee.hireDate ? (newEmployee.hireDate | date: 'yyyy-MM-dd') : ''"
+                  (input)="onHireDateChange($event)"
+                  class="form-input"
+                />
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3 class="form-section-title">Address</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="street">Street</label>
+                  <input
+                    type="text"
+                    id="street"
+                    [(ngModel)]="newEmployee.address!.street"
+                    name="street"
+                    class="form-input"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="city">City</label>
+                  <input
+                    type="text"
+                    id="city"
+                    [(ngModel)]="newEmployee.address!.city"
+                    name="city"
+                    class="form-input"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="state">State</label>
+                  <input
+                    type="text"
+                    id="state"
+                    [(ngModel)]="newEmployee.address!.state"
+                    name="state"
+                    class="form-input"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="zipCode">Zip Code</label>
+                  <input
+                    type="text"
+                    id="zipCode"
+                    [(ngModel)]="newEmployee.address!.zipCode"
+                    name="zipCode"
+                    class="form-input"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3 class="form-section-title">Emergency Contact</h3>
+              <div class="form-grid">
+                <div class="form-group">
+                  <label for="emergencyName">Name</label>
+                  <input
+                    type="text"
+                    id="emergencyName"
+                    [(ngModel)]="newEmployee.emergencyContact!.name"
+                    name="emergencyName"
+                    class="form-input"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="emergencyRelationship">Relationship</label>
+                  <input
+                    type="text"
+                    id="emergencyRelationship"
+                    [(ngModel)]="newEmployee.emergencyContact!.relationship"
+                    name="emergencyRelationship"
+                    class="form-input"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="emergencyPhone">Phone</label>
+                  <input
+                    type="tel"
+                    id="emergencyPhone"
+                    [(ngModel)]="newEmployee.emergencyContact!.phone"
+                    name="emergencyPhone"
+                    class="form-input"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" (click)="closeModal()" class="cancel-button">
+                Cancel
+              </button>
+              <button type="submit" class="submit-button">
+                {{ selectedEmployee() ? 'Update' : 'Add' }} Employee
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  }
+  </div>

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { computed, signal } from '@angular/core';
 import { Cart, CartItem } from '../models/cart.model';
 import { Customer } from '../models/customer.model';
 import { Transaction } from '../models/cart.model';
@@ -202,7 +203,7 @@ export class InvoiceService {
   // Update invoice
   updateInvoice(invoiceId: string, updates: Partial<Invoice>): Invoice | null {
     const invoices = this.invoices();
-    const index = invoices.findIndex(inv => inv.id === invoiceId);
+    const index = invoices.findIndex((inv: Invoice) => inv.id === invoiceId);
     
     if (index === -1) return null;
 
@@ -212,7 +213,7 @@ export class InvoiceService {
       updatedAt: new Date()
     };
 
-    this.invoices.update(inv => [
+    this.invoices.update((inv: Invoice[]) => [
       ...inv.slice(0, index),
       updatedInvoice,
       ...inv.slice(index + 1)
@@ -223,7 +224,7 @@ export class InvoiceService {
 
   // Add payment to invoice
   addPayment(invoiceId: string, paymentMethod: Omit<PaymentMethod, 'id' | 'processedAt'>): Invoice | null {
-    const invoice = this.invoices().find(inv => inv.id === invoiceId);
+    const invoice = this.invoices().find((inv: Invoice) => inv.id === invoiceId);
     if (!invoice) return null;
 
     const newPayment: PaymentMethod = {
@@ -245,42 +246,40 @@ export class InvoiceService {
 
   // Get invoice by ID
   getInvoice(invoiceId: string): Invoice | null {
-    return this.invoices().find(inv => inv.id === invoiceId) || null;
+    return this.invoices().find((inv: Invoice) => inv.id === invoiceId) || null;
   }
 
   // Get invoices by status
   getInvoicesByStatus(status: Invoice['status']): Invoice[] {
-    return this.invoices().filter(inv => inv.status === status);
+    return this.invoices().filter((inv: Invoice) => inv.status === status);
   }
 
   // Get overdue invoices
   getOverdueInvoices(): Invoice[] {
-    const now = new Date();
-    return this.invoices().filter(inv => 
-      inv.status === 'sent' && 
-      inv.dueDate && 
-      inv.dueDate < now
-    );
+    return this.invoices().filter((inv: Invoice) => {
+      return inv.status !== 'paid' && inv.status !== 'cancelled' && 
+             inv.dueDate && new Date() > inv.dueDate;
+    });
   }
 
   // Generate invoice PDF (placeholder)
-  generateInvoicePDF(invoice: Invoice, template?: InvoiceTemplate): Promise<Blob> {
-    // This would integrate with a PDF generation library
-    return new Promise((resolve) => {
-      // Placeholder implementation
-      const content = this.generateInvoiceHTML(invoice, template);
-      const blob = new Blob([content], { type: 'text/html' });
-      resolve(blob);
-    });
+  generateInvoicePDF(invoiceId: string): Invoice | null {
+    const invoice = this.invoices().find((inv: Invoice) => inv.id === invoiceId);
+    if (!invoice) return null;
+
+    // PDF generation logic would go here
+    // For now, just return the invoice
+    return invoice;
   }
 
-  // Send invoice via email (placeholder)
-  sendInvoiceEmail(invoiceId: string, recipientEmail: string): Promise<boolean> {
-    // This would integrate with an email service
-    return new Promise((resolve) => {
-      console.log(`Sending invoice ${invoiceId} to ${recipientEmail}`);
-      resolve(true);
-    });
+  // Send invoice email
+  sendInvoiceEmail(invoiceId: string): Invoice | null {
+    const invoice = this.invoices().find((inv: Invoice) => inv.id === invoiceId);
+    if (!invoice) return null;
+
+    // Email sending logic would go here
+    // For now, just return the invoice
+    return invoice;
   }
 
   // Private methods
@@ -385,6 +384,32 @@ export class InvoiceService {
         </body>
       </html>
     `;
+  }
+
+  // Get template by ID
+  getTemplate(templateId: string): InvoiceTemplate | null {
+    return this.templates().find((template: InvoiceTemplate) => template.id === templateId) || null;
+  }
+
+  // Update template
+  updateTemplate(templateId: string, updates: Partial<InvoiceTemplate>): InvoiceTemplate | null {
+    const templates = this.templates();
+    const index = templates.findIndex((template: InvoiceTemplate) => template.id === templateId);
+    
+    if (index === -1) return null;
+
+    const updatedTemplate = {
+      ...templates[index],
+      ...updates
+    };
+
+    this.templates.update((template: InvoiceTemplate[]) => [
+      ...template.slice(0, index),
+      updatedTemplate,
+      ...template.slice(index + 1)
+    ]);
+
+    return updatedTemplate;
   }
 
   private initializeTemplates(): void {
