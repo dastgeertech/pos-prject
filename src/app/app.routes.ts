@@ -13,6 +13,7 @@ import { BusinessComponent } from './pages/business/business.component';
 import { LocationsComponent } from './pages/locations/locations.component';
 import { CloudFeaturesComponent } from './pages/cloud-features/cloud-features.component';
 import { HardwareManagementComponent } from './pages/hardware-management/hardware-management.component';
+import { SettingsComponent } from './pages/settings/settings.component';
 
 export const routes: Routes = [
   {
@@ -32,7 +33,8 @@ export const routes: Routes = [
       { path: 'business', component: BusinessComponent },
       { path: 'locations', component: LocationsComponent },
       { path: 'cloud-features', component: CloudFeaturesComponent },
-  { path: 'hardware-management', component: HardwareManagementComponent }
+      { path: 'hardware-management', component: HardwareManagementComponent },
+      { path: 'settings', component: SettingsComponent }
     ]
   }
 ];
