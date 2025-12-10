@@ -15,4 +15,8 @@ export class LayoutComponent {
   toggleSidebar() {
     this.sidebarOpen = !this.sidebarOpen;
   }
+
+  expandSidebar() {
+    this.sidebarOpen = true;
+  }
 }
