@@ -1,0 +1,19 @@
+{
+  "routes": {
+    "/pos-prject": {},
+    "/pos-prject/advanced-reports": {},
+    "/pos-prject/business": {},
+    "/pos-prject/cloud-features": {},
+    "/pos-prject/customers": {},
+    "/pos-prject/dashboard": {},
+    "/pos-prject/employees": {},
+    "/pos-prject/hardware-management": {},
+    "/pos-prject/inventory": {},
+    "/pos-prject/locations": {},
+    "/pos-prject/payment": {},
+    "/pos-prject/pos": {},
+    "/pos-prject/products": {},
+    "/pos-prject/reports": {},
+    "/pos-prject/settings": {}
+  }
+}
