@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ["master"]
-  workflow_dispatch:
+  workflow_dispatch:  # Allows manual trigger
 
 permissions:
   contents: read
@@ -14,26 +14,22 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps
+      - run: npm ci --legacy-peer-deps
 
-      - name: Build Angular app
-        run: ng run build --configuration production
+      - run: npm run build -- --configuration production
 
       - name: Copy index.html to 404.html (Fix SPA routing)
-        run: cp dist/pos-prject/browser/index.html dist/pos-prject/browser/404.html
+        run: cp dist/pos-prject/browser/index.html 
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+      - uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist/pos-prject/browser
+          path: ./dist/pos-prject/browser  # Replace with your app name
+
+      - uses: actions/deploy-pages@v4
