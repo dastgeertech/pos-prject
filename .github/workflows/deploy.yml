@@ -25,11 +25,14 @@ jobs:
 
       - run: npm run build -- --configuration production
 
+      - name: Create .nojekyll file
+        run: touch dist/pos-prject/.nojekyll
+
       - name: Copy index.html to 404.html (Fix SPA routing)
-        run: cp dist/pos-prject/browser/index.html 
+        run: cp dist/pos-prject/index.html dist/pos-prject/404.html   # ← Full correct command
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/pos-prject/browser  # Replace with your app name
+          path: ./dist/pos-prject  # Replace with your app name
 
       - uses: actions/deploy-pages@v4
