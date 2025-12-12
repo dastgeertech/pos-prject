@@ -33,6 +33,6 @@ jobs:
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: ./dist/pos-prject  # Replace with your app name
+          path: ./dist/pos-prject/browser  # Replace with your app name
 
       - uses: actions/deploy-pages@v4
