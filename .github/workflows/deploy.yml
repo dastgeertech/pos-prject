@@ -1,3 +1,4 @@
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -26,7 +27,7 @@ jobs:
         run: npm ci --legacy-peer-deps
 
       - name: Build Angular app
-        run: ng build --configuration production
+        run: ng run build --configuration production
 
       - name: Copy index.html to 404.html (Fix SPA routing)
         run: cp dist/pos-prject/browser/index.html dist/pos-prject/browser/404.html
