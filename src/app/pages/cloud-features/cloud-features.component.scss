@@ -1,336 +1,210 @@
 .cloud-features-container {
-  @apply p-6;
+  padding: 1.5rem;
+}
 
-  .header {
-    @apply mb-8 pb-6 border-b border-gray-200 dark:border-gray-700;
+.header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
 
-    h1 {
-      @apply text-3xl font-bold text-gray-900 dark:text-white mb-2;
-    }
+.header h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.5rem;
+}
 
-    p {
-      @apply text-gray-600 dark:text-gray-400;
-    }
-  }
+.header p {
+  color: #6b7280;
+}
 
+.sync-status-overview {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
   .sync-status-overview {
-    @apply bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 mb-6;
-    @apply grid grid-cols-1 md:grid-cols-3 gap-6;
-
-    .status-card {
-      @apply flex items-center space-x-4;
-
-      .status-icon {
-        @apply text-4xl;
-      }
-
-      .status-info {
-        h3 {
-          @apply text-lg font-semibold text-gray-900 dark:text-white;
-        }
-
-        p {
-          @apply text-gray-600 dark:text-gray-400;
-        }
-      }
-    }
-
-    .status-metrics {
-      @apply grid grid-cols-3 gap-4;
-
-      .metric {
-        @apply text-center;
-
-        .label {
-          @apply block text-sm font-medium text-gray-600 dark:text-gray-400 mb-1;
-        }
-
-        .value {
-          @apply text-lg font-semibold text-gray-900 dark:text-white;
-        }
-      }
-    }
-
-    .actions {
-      @apply flex items-center space-x-3;
-
-      button {
-        @apply px-4 py-2 rounded-md text-white;
-
-        &:disabled {
-          @apply opacity-50 cursor-not-allowed;
-        }
-      }
-    }
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
+}
 
+.status-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.status-icon {
+  font-size: 2.25rem;
+}
+
+.status-info h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.status-info p {
+  color: #6b7280;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tab-button {
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid transparent;
+  font-weight: 500;
+  font-size: 0.875rem;
+  color: #6b7280;
+  transition: all 0.2s;
+}
+
+.tab-button:hover {
+  color: #374151;
+  border-bottom-color: #d1d5db;
+}
+
+.tab-button.active {
+  color: #2563eb;
+  border-bottom-color: #2563eb;
+}
+
+.tab-content {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+}
+
+.tab-content h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 1rem;
+}
+
+.operations-section,
+.conflicts-section,
+.devices-section,
+.backups-section,
+.notifications-section {
+  margin-bottom: 1.5rem;
+}
+
+.operations-list,
+.conflicts-list,
+.devices-list,
+.backups-list,
+.notifications-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.operation-item,
+.conflict-item,
+.device-item,
+.backup-item,
+.notification-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+}
+
+.operation-icon,
+.device-icon,
+.backup-icon,
+.notification-icon {
+  font-size: 1.5rem;
+  margin-right: 0.75rem;
+}
+
+.operation-details,
+.device-details,
+.backup-details,
+.notification-content {
+  flex: 1;
+}
+
+.operation-details h4,
+.device-details h4,
+.backup-details h4,
+.notification-content h4 {
+  font-weight: 500;
+  color: #111827;
+}
+
+.operation-details p,
+.device-details p,
+.backup-details p,
+.notification-content p {
+  color: #6b7280;
+  font-size: 0.875rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .header {
+    border-bottom-color: #374151;
+  }
+  
+  .header h1,
+  .status-info h3,
+  .tab-content h3,
+  .operation-details h4,
+  .device-details h4,
+  .backup-details h4,
+  .notification-content h4 {
+    color: white;
+  }
+  
+  .header p,
+  .status-info p,
+  .operation-details p,
+  .device-details p,
+  .backup-details p,
+  .notification-content p {
+    color: #9ca3af;
+  }
+  
+  .sync-status-overview,
+  .tab-content,
+  .operation-item,
+  .conflict-item,
+  .device-item,
+  .backup-item,
+  .notification-item {
+    background-color: #1f2937;
+    border-color: #374151;
+  }
+  
   .tabs {
-    @apply flex space-x-1 mb-6 border-b border-gray-200 dark:border-gray-700;
-
-    .tab-button {
-      @apply px-4 py-2 border-b-2 font-medium text-sm;
-      @apply border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300;
-
-      &.active {
-        @apply text-blue-600 border-blue-600;
-      }
-    }
+    border-bottom-color: #374151;
   }
-
-  .tab-content {
-    @apply bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6;
-
-    h3 {
-      @apply text-lg font-semibold text-gray-900 dark:text-white mb-4;
-    }
-
-    .operations-section,
-    .conflicts-section,
-    .devices-section,
-    .backups-section,
-    .notifications-section {
-      @apply mb-6;
-
-      &:last-child {
-        @apply mb-0;
-      }
-    }
-
-    .operations-list,
-    .conflicts-list,
-    .devices-list,
-    .backups-list,
-    .notifications-list {
-      @apply space-y-3;
-    }
-
-    .operation-item,
-    .conflict-item,
-    .device-item,
-    .backup-item,
-    .notification-item {
-      @apply flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg;
-
-      .operation-icon,
-      .device-icon,
-      .backup-icon,
-      .notification-icon {
-        @apply text-2xl mr-3;
-      }
-
-      .operation-details,
-      .conflict-details,
-      .device-details,
-      .backup-details,
-      .notification-content {
-        @apply flex-1;
-
-        h4,
-        h5 {
-          @apply font-medium text-gray-900 dark:text-white;
-        }
-
-        p {
-          @apply text-gray-600 dark:text-gray-400 text-sm;
-        }
-
-        small {
-          @apply text-gray-500 dark:text-gray-500 text-xs;
-        }
-      }
-
-      .operation-actions,
-      .device-status,
-      .backup-status,
-      .backup-actions,
-      .notification-actions {
-        @apply flex items-center space-x-2;
-      }
-
-      button {
-        padding: 0.25rem 0.75rem;
-        border-radius: 0.25rem;
-        font-size: 0.875rem;
-        color: white;
-
-        &:disabled {
-          opacity: 0.5;
-          cursor: not-allowed;
-        }
-      }
-    }
-
-    .notification-item {
-      &.read {
-        @apply opacity-60;
-      }
-    }
-
-    .settings-form {
-      @apply space-y-4;
-
-      .form-group {
-        label {
-          @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2;
-        }
-
-        input[type="checkbox"] {
-          @apply mr-2;
-        }
-
-        input[type="number"],
-        select {
-          @apply w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white;
-
-          &:focus {
-            @apply ring-2 ring-blue-500 border-blue-500 outline-none;
-          }
-        }
-      }
-
-      button {
-        background-color: #16a34a;
-        &:hover { background-color: #15803d; }
-        color: white;
-        padding: 0.5rem 1rem;
-        border-radius: 0.375rem;
-      }
-    }
-
-    .backup-actions {
-      @apply flex justify-between items-center mb-4;
-
-      .action-buttons {
-        @apply flex space-x-3;
-
-        button {
-          @apply px-4 py-2 rounded-md text-white;
-
-          &.bg-blue-600 {
-            background-color: #2563eb;
-            &:hover { background-color: #1d4ed8; }
-          }
-
-          &.bg-green-600 {
-            background-color: #16a34a;
-            &:hover { background-color: #15803d; }
-          }
-        }
-      }
-    }
-
-    .notifications-header {
-      @apply flex justify-between items-center mb-4;
-
-      button {
-        background-color: #6b7280;
-        &:hover { background-color: #4b5563; }
-        color: white;
-        padding: 0.25rem 0.75rem;
-        border-radius: 0.25rem;
-        font-size: 0.875rem;
-      }
-    }
+  
+  .tab-button {
+    color: #9ca3af;
   }
-
-  .modal-overlay {
-    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
-
-    .modal {
-      @apply bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 max-w-md w-full;
-
-      h3 {
-        @apply text-xl font-semibold text-gray-900 dark:text-white mb-4;
-      }
-
-      p {
-        @apply text-gray-600 dark:text-gray-400 mb-4;
-      }
-
-      .resolution-options {
-        @apply grid grid-cols-2 gap-3;
-
-        button {
-          @apply px-4 py-2 rounded-md text-white;
-
-          &.bg-blue-600 {
-            background-color: #2563eb;
-            &:hover { background-color: #1d4ed8; }
-          }
-
-          &.bg-green-600 {
-            background-color: #16a34a;
-            &:hover { background-color: #15803d; }
-          }
-
-          &.bg-purple-600 {
-            background-color: #9333ea;
-            &:hover { background-color: #7e22ce; }
-          }
-
-          &.bg-gray-500 {
-            background-color: #6b7280;
-            &:hover { background-color: #4b5563; }
-          }
-        }
-      }
-    }
-  }
-
-  // Responsive design
-  @media (max-width: 1024px) {
-    @apply p-4;
-
-    .sync-status-overview {
-      @apply grid-cols-1;
-    }
-
-    .header {
-      h1 {
-        @apply text-2xl;
-      }
-    }
-  }
-
-  @media (max-width: 768px) {
-    @apply p-3;
-
-    .header {
-      @apply pb-4 mb-6;
-
-      h1 {
-        @apply text-xl;
-      }
-    }
-
-    .tabs {
-      @apply flex-wrap;
-
-      .tab-button {
-        @apply px-2 py-1 text-xs;
-      }
-    }
-
-    .operation-item,
-    .conflict-item,
-    .device-item,
-    .backup-item,
-    .notification-item {
-      @apply flex-col items-start space-y-3;
-
-      .operation-actions,
-      .backup-actions,
-      .notification-actions {
-        @apply w-full justify-end;
-      }
-    }
-
-    .modal {
-      @apply m-4;
-
-      .resolution-options {
-        @apply grid-cols-1;
-      }
-    }
+  
+  .tab-button:hover {
+    color: white;
+    border-bottom-color: #4b5563;
   }
 }

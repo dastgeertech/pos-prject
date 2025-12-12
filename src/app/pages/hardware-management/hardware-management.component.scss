@@ -1,277 +1,623 @@
-/* Hardware Management Component Styles */
 .hardware-management-container {
-  @apply p-6 max-w-7xl mx-auto;
-  
-  .header {
-    @apply mb-8;
-    
-    h1 {
-      @apply text-3xl font-bold text-gray-900 dark:text-white;
-    }
-    
-    p {
-      @apply text-gray-600 dark:text-gray-400 mt-2;
-    }
-  }
+  padding: 1.5rem;
+  max-width: 80rem;
+  margin: 0 auto;
+}
 
-  /* Status Overview */
+.header {
+  margin-bottom: 2rem;
+}
+
+.header h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: rgb(17 24 39);
+}
+
+@media (prefers-color-scheme: dark) {
+  .header h1 {
+    color: white;
+  }
+}
+
+.header p {
+  color: rgb(75 85 99);
+  margin-top: 0.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .header p {
+    color: rgb(156 163 175);
+  }
+}
+
+.status-overview {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
   .status-overview {
-    @apply bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-6;
-    @apply flex flex-col md:flex-row items-center justify-between gap-6;
-    
-    .status-card {
-      @apply flex items-center gap-4;
-      
-      .status-icon {
-        @apply text-4xl;
-      }
-      
-      .status-info {
-        h3 {
-          @apply text-lg font-semibold text-gray-900 dark:text-white;
-        }
-        
-        p {
-          @apply text-gray-600 dark:text-gray-400;
-        }
-      }
-    }
-    
-    .status-metrics {
-      @apply flex gap-6;
-      
-      .metric {
-        @apply text-center;
-        
-        .label {
-          @apply block text-sm text-gray-600 dark:text-gray-400;
-        }
-        
-        .value {
-          @apply block text-2xl font-bold text-gray-900 dark:text-white;
-        }
-      }
-    }
-    
-    .actions {
-      @apply flex gap-3;
-    }
+    background-color: rgb(31 41 55);
   }
+}
 
-  /* Tabs Navigation */
+@media (min-width: 768px) {
+  .status-overview {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.status-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.status-icon {
+  font-size: 2.25rem;
+}
+
+.status-info h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: rgb(17 24 39);
+}
+
+@media (prefers-color-scheme: dark) {
+  .status-info h3 {
+    color: white;
+  }
+}
+
+.status-info p {
+  color: rgb(75 85 99);
+}
+
+@media (prefers-color-scheme: dark) {
+  .status-info p {
+    color: rgb(156 163 175);
+  }
+}
+
+.status-metrics {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.metric {
+  text-align: center;
+}
+
+.metric .label {
+  display: block;
+  font-size: 0.875rem;
+  color: rgb(75 85 99);
+}
+
+@media (prefers-color-scheme: dark) {
+  .metric .label {
+    color: rgb(156 163 175);
+  }
+}
+
+.metric .value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: rgb(17 24 39);
+}
+
+@media (prefers-color-scheme: dark) {
+  .metric .value {
+    color: white;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.tabs {
+  display: flex;
+  border-bottom: 1px solid rgb(229 231 235);
+  margin-bottom: 1.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
   .tabs {
-    @apply flex border-b border-gray-200 dark:border-gray-700 mb-6;
-    
-    .tab-button {
-      @apply px-4 py-2 text-sm font-medium border-b-2 border-transparent;
-      @apply text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white;
-      @apply hover:border-gray-300 dark:hover:border-gray-600;
-      
-      &.active {
-        @apply border-blue-500 text-blue-600 dark:text-blue-400;
-      }
-    }
+    border-bottom-color: rgb(55 65 81);
   }
+}
 
-  /* Tab Content */
+.tab-button {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-bottom: 2px solid transparent;
+  color: rgb(107 114 128);
+  transition: all 0.2s;
+}
+
+.tab-button:hover {
+  color: rgb(55 65 81);
+  border-bottom-color: rgb(209 213 219);
+}
+
+@media (prefers-color-scheme: dark) {
+  .tab-button {
+    color: rgb(156 163 175);
+  }
+  
+  .tab-button:hover {
+    color: white;
+    border-bottom-color: rgb(75 85 99);
+  }
+}
+
+.tab-button.active {
+  border-bottom-color: rgb(59 130 246);
+  color: rgb(37 99 235);
+}
+
+@media (prefers-color-scheme: dark) {
+  .tab-button.active {
+    color: rgb(96 165 250);
+  }
+}
+
+.tab-content {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  padding: 1.5rem;
+}
+
+@media (prefers-color-scheme: dark) {
   .tab-content {
-    @apply bg-white dark:bg-gray-800 rounded-lg shadow-md p-6;
-    
-    /* Devices Tab */
-    .devices-header, .print-jobs-header, .scans-header, .alerts-header, .logs-header {
-      @apply flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4;
-      
-      h3 {
-        @apply text-xl font-semibold text-gray-900 dark:text-white;
-      }
-      
-      .filters {
-        @apply flex gap-3;
-        
-        select {
-          @apply px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md;
-          @apply bg-white dark:bg-gray-700 text-gray-900 dark:text-white;
-        }
-      }
-    }
+    background-color: rgb(31 41 55);
+  }
+}
 
-    /* Devices List */
+.devices-header, .print-jobs-header, .scans-header, .alerts-header, .logs-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .devices-header, .print-jobs-header, .scans-header, .alerts-header, .logs-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.devices-header h3, .print-jobs-header h3, .scans-header h3, .alerts-header h3, .logs-header h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(17 24 39);
+}
+
+@media (prefers-color-scheme: dark) {
+  .devices-header h3, .print-jobs-header h3, .scans-header h3, .alerts-header h3, .logs-header h3 {
+    color: white;
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 0.75rem;
+}
+
+.filters select {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgb(209 213 219);
+  border-radius: 0.375rem;
+  background-color: white;
+  color: rgb(17 24 39);
+}
+
+@media (prefers-color-scheme: dark) {
+  .filters select {
+    border-color: rgb(75 85 99);
+    background-color: rgb(55 65 81);
+    color: white;
+  }
+}
+
     .devices-list, .print-jobs-list, .scans-list, .alerts-list, .logs-list {
-      @apply space-y-4;
-      
-      .device-item, .print-job-item, .scan-item, .alert-item, .log-item {
-        background-color: #f9fafb;
-        &.dark { background-color: #374151; }
-        border-radius: 0.5rem;
-        padding: 1rem;
-        @apply flex flex-col sm:flex-row items-start sm:items-center gap-4;
-        
-        .device-icon, .job-icon, .scan-icon, .alert-icon {
-          @apply text-2xl;
-        }
-        
-        .device-details, .job-details, .scan-details, .alert-details, .log-details {
-          @apply flex-1;
-          
-          h4 {
-            @apply text-lg font-medium text-gray-900 dark:text-white;
-          }
-          
-          p {
-            @apply text-gray-600 dark:text-gray-400;
-          }
-          
-          small {
-            @apply text-gray-500 dark:text-gray-500;
-          }
-        }
-        
-        .device-status, .job-status, .alert-severity, .log-level {
-          @apply flex items-center;
-        }
-        
-        .device-actions, .job-actions, .alert-actions {
-          @apply flex gap-2;
-          
-          button {
-            @apply text-sm;
-          }
-        }
-      }
-    }
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
-    /* Specific styles for different item types */
-    .scan-item {
-      background-color: #eff6ff;
-      &.dark { background-color: rgba(30, 64, 175, 0.2); }
-    }
-    
-    .alert-item {
-      background-color: #fffbeb;
-      &.dark { background-color: rgba(146, 64, 14, 0.2); }
-    }
-    
-    .log-item {
-      @apply bg-gray-100 dark:bg-gray-600;
-    }
-  }
+.device-item, .print-job-item, .scan-item, .alert-item, .log-item {
+  background-color: rgb(249 250 251);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 
-  /* Modal Styles */
-  .modal-overlay {
-    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
-    
-    .modal {
-      @apply bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 max-w-md w-full mx-4;
-      
-      h3 {
-        @apply text-xl font-semibold text-gray-900 dark:text-white mb-4;
-      }
-      
-      .form-group {
-        @apply mb-4;
-        
-        label {
-          @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1;
-        }
-        
-        input, select {
-          @apply w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md;
-          @apply bg-white dark:bg-gray-700 text-gray-900 dark:text-white;
-          
-          &:focus {
-            @apply ring-2 ring-blue-500 border-blue-500;
-          }
-        }
-      }
-      
-      .device-settings {
-        @apply space-y-4;
-      }
-      
-      .modal-actions {
-        @apply flex gap-3 justify-end mt-6;
-      }
-    }
+@media (prefers-color-scheme: dark) {
+  .device-item, .print-job-item, .log-item {
+    background-color: rgb(55 65 81);
   }
+}
+
+@media (min-width: 640px) {
+  .device-item, .print-job-item, .scan-item, .alert-item, .log-item {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.device-icon, .job-icon, .scan-icon, .alert-icon {
+  font-size: 1.5rem;
+}
+
+.device-details, .job-details, .scan-details, .alert-details, .log-details {
+  flex: 1;
+}
+
+.device-details h4, .job-details h4, .scan-details h4, .alert-details h4, .log-details h4 {
+  font-size: 1.125rem;
+  font-weight: 500;
+  color: rgb(17 24 39);
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-details h4, .job-details h4, .scan-details h4, .alert-details h4, .log-details h4 {
+    color: white;
+  }
+}
+
+.device-details p, .job-details p, .scan-details p, .alert-details p, .log-details p {
+  color: rgb(75 85 99);
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-details p, .job-details p, .scan-details p, .alert-details p, .log-details p {
+    color: rgb(156 163 175);
+  }
+}
+
+.device-details small, .job-details small, .scan-details small, .alert-details small, .log-details small {
+  color: rgb(107 114 128);
+}
+
+@media (prefers-color-scheme: dark) {
+  .device-details small, .job-details small, .scan-details small, .alert-details small, .log-details small {
+    color: rgb(107 114 128);
+  }
+}
+
+.device-status, .job-status, .alert-severity, .log-level {
+  display: flex;
+  align-items: center;
+}
+
+.device-actions, .job-actions, .alert-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.device-actions button, .job-actions button, .alert-actions button {
+  font-size: 0.875rem;
+}
+
+.scan-item {
+  background-color: rgb(239 246 255);
+}
+
+@media (prefers-color-scheme: dark) {
+  .scan-item {
+    background-color: rgba(30, 64, 175, 0.2);
+  }
+}
+
+.alert-item {
+  background-color: rgb(255 251 235);
+}
+
+@media (prefers-color-scheme: dark) {
+  .alert-item {
+    background-color: rgba(146, 64, 14, 0.2);
+  }
+}
+
+.log-item {
+  background-color: rgb(243 244 246);
+}
+
+@media (prefers-color-scheme: dark) {
+  .log-item {
+    background-color: rgb(75 85 99);
+  }
+}
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.modal {
+  background-color: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+  padding: 1.5rem;
+  max-width: 28rem;
+  width: 100%;
+  margin: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal {
+    background-color: rgb(31 41 55);
+  }
+}
+
+.modal h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: rgb(17 24 39);
+  margin-bottom: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal h3 {
+    color: white;
+  }
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(55 65 81);
+  margin-bottom: 0.25rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-group label {
+    color: rgb(209 213 219);
+  }
+}
+
+.form-group input, .form-group select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid rgb(209 213 219);
+  border-radius: 0.375rem;
+  background-color: white;
+  color: rgb(17 24 39);
+}
+
+@media (prefers-color-scheme: dark) {
+  .form-group input, .form-group select {
+    border-color: rgb(75 85 99);
+    background-color: rgb(55 65 81);
+    color: white;
+  }
+}
+
+.form-group input:focus, .form-group select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(59 130 246);
+  border-color: rgb(59 130 246);
+}
+
+.device-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+  margin-top: 1.5rem;
+}
 
   /* Status Colors */
   .status-connected {
-    @apply bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-300;
+    background-color: #dcfce7;
+    color: #166534;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .status-connected {
+      background-color: rgba(20, 83, 45, 0.2);
+      color: #86efac;
+    }
   }
   
   .status-disconnected {
-    @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300;
+    background-color: #f3f4f6;
+    color: #1f2937;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .status-disconnected {
+      background-color: #374151;
+      color: #d1d5db;
+    }
   }
   
   .status-error {
-    @apply bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300;
+    background-color: #fecaca;
+    color: #991b1b;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .status-error {
+      background-color: rgba(127, 29, 29, 0.2);
+      color: #fca5a5;
+    }
   }
   
   .status-maintenance {
-    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300;
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .status-maintenance {
+      background-color: rgba(146, 64, 14, 0.2);
+      color: #fde047;
+    }
   }
 
   /* Severity Colors */
   .severity-low {
-    @apply bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300;
+    background-color: #dbeafe;
+    color: #1e40af;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .severity-low {
+      background-color: rgba(30, 64, 175, 0.2);
+      color: #93c5fd;
+    }
   }
   
   .severity-medium {
-    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300;
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .severity-medium {
+      background-color: rgba(146, 64, 14, 0.2);
+      color: #fde047;
+    }
   }
   
   .severity-high {
-    @apply bg-orange-100 text-orange-800 dark:bg-orange-900/20 dark:text-orange-300;
+    background-color: #fed7aa;
+    color: #c2410c;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .severity-high {
+      background-color: rgba(154, 52, 18, 0.2);
+      color: #fdba74;
+    }
   }
   
   .severity-critical {
-    @apply bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300;
+    background-color: #fecaca;
+    color: #991b1b;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .severity-critical {
+      background-color: rgba(127, 29, 29, 0.2);
+      color: #fca5a5;
+    }
   }
 
   /* Log Level Colors */
   .log-info {
-    @apply bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300;
+    background-color: #dbeafe;
+    color: #1e40af;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .log-info {
+      background-color: rgba(30, 64, 175, 0.2);
+      color: #93c5fd;
+    }
   }
   
   .log-warning {
-    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-300;
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .log-warning {
+      background-color: rgba(146, 64, 14, 0.2);
+      color: #fde047;
+    }
   }
   
   .log-error {
-    @apply bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-300;
+    background-color: #fecaca;
+    color: #991b1b;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .log-error {
+      background-color: rgba(127, 29, 29, 0.2);
+      color: #fca5a5;
+    }
   }
   
   .log-debug {
-    @apply bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300;
+    background-color: #f3f4f6;
+    color: #1f2937;
+  }
+  
+  @media (prefers-color-scheme: dark) {
+    .log-debug {
+      background-color: #374151;
+      color: #d1d5db;
+    }
   }
 
   /* Responsive Design */
   @media (max-width: 768px) {
     .status-overview {
-      @apply flex-col items-stretch;
+      flex-direction: column;
+      align-items: stretch;
       
       .status-metrics {
-        @apply justify-center;
+        justify-content: center;
       }
       
       .actions {
-        @apply justify-center;
+        justify-content: center;
       }
     }
     
     .tabs {
-      @apply flex-wrap;
+      flex-wrap: wrap;
       
       .tab-button {
-        @apply flex-1 text-center;
+        flex: 1;
+        text-align: center;
       }
     }
     
     .device-item, .print-job-item, .scan-item, .alert-item, .log-item {
-      @apply flex-col items-stretch;
+      flex-direction: column;
+      align-items: stretch;
       
       .device-actions, .job-actions, .alert-actions {
-        @apply justify-center;
+        justify-content: center;
       }
     }
   }
@@ -290,4 +636,3 @@
       background-color: rgba(146, 64, 14, 0.2);
     }
   }
-}

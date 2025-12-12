@@ -1,234 +1,298 @@
-@use '../../../styles.scss' as *;
-
 .business-container {
-  @apply p-6 max-w-7xl mx-auto;
+  padding: 1.5rem;
+  max-width: 80rem;
+  margin: 0 auto;
+}
 
-  .header {
-    @apply mb-8;
+.header {
+  margin-bottom: 2rem;
+}
 
-    h1 {
-      @apply text-3xl font-bold text-white mb-2;
-    }
+.header h1 {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+}
 
-    p {
-      @apply text-slate-400;
-    }
-  }
+.header p {
+  color: rgb(148 163 184);
+}
 
-  .industry-section {
-    @apply mb-8;
+.industry-section {
+  margin-bottom: 2rem;
+}
 
-    h2 {
-      @apply text-xl font-semibold text-white mb-4;
-    }
+.industry-section h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 1rem;
+}
 
-    .industry-grid {
-      @apply grid grid-cols-1 md:grid-cols-3 gap-4;
+.industry-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
+}
 
-      .industry-card {
-        @apply bg-slate-800 rounded-lg p-6 border-2 cursor-pointer transition-all duration-200 hover:border-blue-500 hover:shadow-lg;
-
-        .industry-icon {
-          @apply text-3xl mb-3;
-        }
-
-        .industry-name {
-          @apply text-lg font-semibold text-white mb-2;
-        }
-
-        .industry-description {
-          @apply text-slate-400 text-sm mb-3;
-        }
-
-        .industry-features {
-          @apply flex flex-wrap gap-1;
-
-          .feature-tag {
-            @apply bg-slate-700 text-slate-300 text-xs px-2 py-1 rounded;
-          }
-        }
-      }
-    }
-  }
-
-  .settings-section {
-    @apply bg-slate-800 rounded-lg p-6;
-
-    .tabs-header {
-      @apply flex flex-wrap gap-2 mb-6 border-b border-slate-700 pb-4;
-
-      .tab-button {
-        @apply px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200;
-        @apply bg-slate-700 text-slate-300 hover:bg-slate-600 hover:text-white;
-
-        &.tab-active {
-          @apply bg-blue-600 text-white;
-        }
-      }
-    }
-
-    .tab-content {
-      .settings-grid {
-        @apply grid grid-cols-1 lg:grid-cols-2 gap-6;
-      }
-
-      .setting-card {
-        @apply bg-slate-700 rounded-lg p-6;
-
-        .setting-title {
-          @apply text-lg font-semibold text-white mb-4;
-        }
-
-        .setting-form {
-          .form-label {
-            @apply block text-sm font-medium text-slate-300 mb-2;
-          }
-
-          .form-input {
-            @apply w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg text-white placeholder-slate-400;
-            @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
-          }
-
-          .form-textarea {
-            @apply w-full px-3 py-2 bg-slate-600 border border-slate-500 rounded-lg text-white placeholder-slate-400;
-            @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
-            resize: vertical;
-          }
-
-          .save-button {
-            @apply mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors;
-          }
-        }
-
-        .hours-grid {
-          @apply space-y-3;
-
-          .hour-item {
-            @apply flex items-center justify-between p-3 bg-slate-600 rounded-lg;
-
-            .day-label {
-              @apply text-slate-300 font-medium min-w-24;
-            }
-
-            .time-inputs {
-              @apply flex items-center gap-2;
-
-              .time-input {
-                @apply px-2 py-1 bg-slate-500 border border-slate-400 rounded text-white;
-              }
-
-              .time-separator {
-                @apply text-slate-400;
-              }
-            }
-
-            .checkbox-label {
-              @apply flex items-center gap-2 text-slate-300;
-
-              .closed-checkbox {
-                @apply rounded border-slate-400 text-blue-600;
-              }
-            }
-          }
-        }
-
-        .tax-grid {
-          @apply space-y-4;
-
-          .tax-item {
-            @apply flex items-center justify-between;
-
-            .tax-label {
-              @apply text-slate-300 font-medium;
-            }
-
-            .tax-input-group {
-              @apply flex items-center gap-2;
-
-              .tax-input {
-                @apply w-20 px-2 py-1 bg-slate-500 border border-slate-400 rounded text-white text-right;
-              }
-
-              .tax-percent {
-                @apply text-slate-400;
-              }
-            }
-          }
-        }
-
-        .pricing-options {
-          @apply space-y-3;
-
-          .checkbox-label {
-            @apply flex items-center gap-2 text-slate-300;
-          }
-        }
-
-        .payment-methods {
-          @apply space-y-3;
-
-          .payment-method {
-            @apply flex items-center gap-2 text-slate-300 p-2 bg-slate-600 rounded;
-          }
-        }
-
-        .payment-settings {
-          @apply space-y-3;
-
-          .checkbox-label {
-            @apply flex items-center gap-2 text-slate-300;
-          }
-        }
-      }
-
-      .settings-card {
-        @apply bg-slate-700 rounded-lg p-6;
-
-        .setting-title {
-          @apply text-lg font-semibold text-white mb-2;
-        }
-
-        p {
-          @apply text-slate-400;
-        }
-      }
-    }
-  }
-
-  .checkbox-label {
-    input[type="checkbox"] {
-      @apply rounded border-slate-400 text-blue-600 focus:ring-blue-500;
-    }
+@media (min-width: 768px) {
+  .industry-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-// Responsive design
+.industry-card {
+  background-color: rgb(30 41 59);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.industry-card:hover {
+  border-color: rgb(59 130 246);
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+.industry-icon {
+  font-size: 1.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.industry-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 0.5rem;
+}
+
+.industry-description {
+  color: rgb(148 163 184);
+  font-size: 0.875rem;
+  margin-bottom: 0.75rem;
+}
+
+.industry-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem;
+}
+
+.feature-tag {
+  background-color: rgb(51 65 85);
+  color: rgb(203 213 225);
+  font-size: 0.75rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+.settings-section {
+  background-color: rgb(30 41 59);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.tabs-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgb(51 65 85);
+  padding-bottom: 1rem;
+}
+
+.tab-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  background-color: rgb(51 65 85);
+  color: rgb(203 213 225);
+}
+
+.tab-button:hover {
+  background-color: rgb(71 85 105);
+  color: white;
+}
+
+.tab-button.tab-active {
+  background-color: rgb(37 99 235);
+  color: white;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .settings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.setting-card {
+  background-color: rgb(51 65 85);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+
+.setting-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: rgb(203 213 225);
+  margin-bottom: 0.5rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background-color: rgb(71 85 105);
+  border: 1px solid rgb(100 116 139);
+  border-radius: 0.5rem;
+  color: white;
+}
+
+.form-input::placeholder {
+  color: rgb(148 163 184);
+}
+
+.form-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(37 99 235);
+  border-color: transparent;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background-color: rgb(71 85 105);
+  border: 1px solid rgb(100 116 139);
+  border-radius: 0.5rem;
+  color: white;
+  resize: vertical;
+}
+
+.form-textarea::placeholder {
+  color: rgb(148 163 184);
+}
+
+.form-textarea:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(37 99 235);
+  border-color: transparent;
+}
+
+.save-button {
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  background-color: rgb(37 99 235);
+  color: white;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+}
+
+.save-button:hover {
+  background-color: rgb(29 78 216);
+}
+
+.hours-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hour-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background-color: rgb(71 85 105);
+  border-radius: 0.5rem;
+}
+
+.day-label {
+  color: rgb(203 213 225);
+  font-weight: 500;
+  min-width: 6rem;
+}
+
+.time-inputs {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.time-input {
+  padding: 0.25rem 0.5rem;
+  background-color: rgb(100 116 139);
+  border: 1px solid rgb(148 163 184);
+  border-radius: 0.25rem;
+  color: white;
+}
+
+.time-separator {
+  color: rgb(148 163 184);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: rgb(203 213 225);
+}
+
+.checkbox-label input[type="checkbox"] {
+  border-radius: 0.25rem;
+  border-color: rgb(100 116 139);
+  color: rgb(37 99 235);
+}
+
+.checkbox-label input[type="checkbox"]:focus {
+  box-shadow: 0 0 0 2px rgb(37 99 235);
+}
+
 @media (max-width: 768px) {
   .business-container {
-    @apply p-4;
-
-    .industry-grid {
-      @apply grid-cols-1;
-    }
-
-    .tabs-header {
-      @apply flex-col items-stretch;
-
-      .tab-button {
-        @apply text-center;
-      }
-    }
-
-    .settings-grid {
-      @apply grid-cols-1;
-    }
-
-    .hour-item {
-      @apply flex-col items-stretch gap-2;
-
-      .time-inputs {
-        @apply justify-center;
-      }
-    }
+    padding: 1rem;
+  }
+  
+  .industry-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .tabs-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .tab-button {
+    text-align: center;
+  }
+  
+  .settings-grid {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+  
+  .hour-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  
+  .time-inputs {
+    justify-content: center;
   }
 }
